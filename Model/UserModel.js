@@ -1,16 +1,8 @@
 const mongoose = require('mongoose');
 const { gender } = require('../Utils/Gender');
+const bcrypt = require('bcrypt');
 
-const addressSchema = new mongoose.Schema({
-  city: {
-    type: String,
-    required: [true, "Please enter your city"]
-  },
-  state: {
-    type: String,
-    required: [true, "Please enter your state"]
-  }
-});
+
 
 const userSchema = new mongoose.Schema({
   userName: {
@@ -34,31 +26,61 @@ const userSchema = new mongoose.Schema({
     
     match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email address'] 
   },
-  Password: {
+  password: {
     type: String,
-    required:true,
+    required: function() {
+      return !this.googleId;  
+    }
     
+  },
+  googleId: {
+    type: String,
+    unique: true
   },
   gender: {
     type: String,
-    enum: [gender.MALE, gender.FEMALE],
+    enum: [gender.MALE, gender.FEMALE,gender.UNKNOWN],
     required: true
   },
   image: {
     type: String,
     default: "default.png"
   },
-  address: addressSchema,
+  
   token:String,
   resetPasswordExpires:{
     type:Date,
     default:undefined
-} ,
+} ,isActive:{
+  type:Boolean,
+  default:false
+},activationCode: {
+  type: String,
+  required: false,
+}
+,
+city: {
+  type: String,
+  //required: [true, "Please enter your city"]
+},
+state: {
+  type: String,
+  //required: [true, "Please enter your state"]
+},
 resetPasswordToken:{
     type:String,
     default:undefined
 } ,
 imagePublicIds:String,
+});
+userSchema.pre('save', async function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+
+  this.password = await bcrypt.hash(this.password, 10);
+
+  next();
 });
 
 const userModel = mongoose.model('User', userSchema);

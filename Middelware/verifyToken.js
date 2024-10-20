@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-
+const userModel=require('../Model/UserModel');
 exports.verifay = async (req, res, next) => {
     try {
        

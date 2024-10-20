@@ -7,7 +7,7 @@ const upload = multer({ storage: storage });
 
 const resizeImage = (options) => {
     return async (req, res, next) => {
-      console.log(req.file);
+     
       
         if (!req.file) {
         console.log('No file uploaded or parsed correctly');
