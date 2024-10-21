@@ -158,47 +158,6 @@ exports.activateAccount = asyncHandler (async (req, res) => {
 res.status(200).json({"message":"Please check your email for the activation code."});
 })
 
-exports.login=asyncHandler(async (req,res,next)=>{
-    const {email,password}=req.body;
-    const user=await userModel.findOne({email});
-    if(!user)
-    {
-        return res.status(404).json({'message':"User not found!"});
-    }
-    if(!user.isActive)
-    {
-        
-            const options={
-                to:user.email,
-                from:process.env.email,
-                subject:'activation account',
-                html:`<html> <!-- Paste the HTML content here, replacing variables with actual data -->
-                 <p>Hi ${username},</p>
-                 <p>Your activation code is:</p>
-                 <div class="activation-code">${activationCode}</div>
-                 <p>Please enter this code to activate your account.</p>
-                 <p>Thank you, <br>The YourApp Team</p>
-                 </html>`
-            }
-            sendEmail(options)
-        
-            return res.status(200).json({"message":"Please check your email for the activation code."});
-    }
-    const hasedPassword=await bcrypt.compare(password,user.password);
-    console.log(hasedPassword);
-    
-    if(!hasedPassword)
-    {
-        return res.status(400).json({
-            "message":"Invalid Email or Password"
-        })
-    }
-    const token=await generateToken({id:user._id});
-    user.token=token;
-   await user.save();
 
-   res.status(200).json({'message':"login success",token:token});
-
-})
 
   
