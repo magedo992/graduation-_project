@@ -25,7 +25,7 @@ passport.use(new GoogleStrategy({
           image: picture,       
           gender: 'UNKNOWN',    
           isActive: true,  
-          googleId: profile.id     
+               
         });
        
         

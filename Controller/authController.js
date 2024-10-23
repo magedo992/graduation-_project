@@ -1,5 +1,4 @@
-
-const userModel=require('../Model/UserModel');
+const userModel=require('../Model/UserModel')
 const {generateToken}=require('../Utils/generateToken');
 const {cloudinary}=require('../Middelware/uploadImage');
 
@@ -26,7 +25,7 @@ exports.signUp = asyncHandler(async (req, res, next) => {
     const existUser = await userModel.findOne({ email: email });
     
     if (existUser) {
-        return next(new ErrorHandler("User already exists", 400));
+        return next(new ErrorHandler("User already exists", 404));
     }
 
     const uploadFromBuffer = (fileBuffer) => {
@@ -65,7 +64,8 @@ exports.signUp = asyncHandler(async (req, res, next) => {
         gender: gender,
         phone: phone,
         userName: username,
-        activationCode:activationCode
+        activationCode:activationCode,
+        googleId:null
     });
 
     
@@ -177,7 +177,7 @@ exports.login=asyncHandler(async (req,res,next)=>{
                  <p>Your activation code is:</p>
                  <div class="activation-code">${activationCode}</div>
                  <p>Please enter this code to activate your account.</p>
-                 <p>Thank you, <br>The YourApp Team</p>
+                 <p>Thank you, <br>The Nabta Team</p>
                  </html>`
             }
             sendEmail(options)
