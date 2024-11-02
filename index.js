@@ -7,6 +7,7 @@ const authRoute = require('./Route/authRoute');
 const passport = require('passport');
 const session = require('express-session');
 const {verifay}=require('./Middelware/verifyToken');
+const cors=require('cors');
 
 
 app.use(session({
@@ -14,7 +15,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
-
+app.use(cors());
 app.use(passport.initialize());
 app.use(passport.session());  
 

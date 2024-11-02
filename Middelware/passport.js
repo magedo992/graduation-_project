@@ -1,15 +1,19 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+// const FacebookStrategy=require('passport-facebook');
 const User=require('../Model/UserModel');
 const {generateToken}=require('../Utils/generateToken');
 
 passport.use(new GoogleStrategy({
     clientID: process.env.Client_ID,
     clientSecret: process.env.Client_secret,
-    callbackURL: `http://localhost:5858/api/auth/callback`,
+    callbackURL: 'http://localhost:5858/api/auth/callback',
     passReqToCallback: true
   },
   async function(request, accessToken, refreshToken, profile, done) {
+ 
+    
+    
     try {
       const { email, name, picture } = profile._json;
 
@@ -24,7 +28,8 @@ passport.use(new GoogleStrategy({
           password: "fromGoogle", 
           image: picture,       
           gender: 'UNKNOWN',    
-          isActive: true,  
+          isActive: true,
+          state:profile.address  
                
         });
        
@@ -43,6 +48,8 @@ passport.use(new GoogleStrategy({
     }
   }
 ));
+
+
 
 passport.serializeUser((user, done) => {
   done(null, user);

@@ -7,7 +7,7 @@ const {ErrorHandler}=require('../Utils/ErrorHandler');
 const {sendEmail}=require('../Utils/EmailSender');
 const bcrypt=require('bcrypt');
 const generateActivationCode = () => {
-    return Math.floor(1000 + Math.random() * 9000); 
+    return Math.floor(100000 + Math.random() * 900000); 
   };
 
 
@@ -15,7 +15,7 @@ const generateActivationCode = () => {
 const streamifier = require('streamifier');
 
 exports.signUp = asyncHandler(async (req, res, next) => {
-    const { email, password, phone, gender, address, username } = req.body;
+    const { email, password, phone, gender, city,state, username } = req.body;
     if(!email||!password)
     {
         return res.status(400).json({
@@ -65,7 +65,9 @@ exports.signUp = asyncHandler(async (req, res, next) => {
         phone: phone,
         userName: username,
         activationCode:activationCode,
-        googleId:null
+        googleId:null,
+        city:city,
+        state:state
     });
 
     

@@ -11,9 +11,10 @@ require('../Middelware/passport');
 
 const authValidator=require('../Middelware/Validator/authValidator');
 
-router.post('/signup', upload.single('ProfileImage'), resizeImage({ width: 600, height: 600, quality: 90 }),authValidator.signup, signUp);
-router.post('/activateAccount', upload.none(),authValidator.activateAccount, activateAccount);
-router.post('/SendactivationCode', upload.none(),authValidator.sendActivationCode, SendactivationCode);
+router.post('/signup', upload.single('ProfileImage'), resizeImage({ width: 600, height: 600, quality: 90 })
+, authValidator.singUp,signUp);
+router.post('/activateAccount', upload.none(), activateAccount);
+router.post('/SendactivationCode', upload.none(), SendactivationCode);
 router.post('/login', upload.none(),authValidator.login, login);
 
 

@@ -1,10 +1,15 @@
 const mongoose = require('mongoose');
 const { gender } = require('../Utils/Gender');
 const bcrypt = require('bcrypt');
+const { string } = require('joi');
 
 
 
 const userSchema = new mongoose.Schema({
+  fullName:{
+    type:String,
+
+  },
   userName: {
     type: String,
     required: true,
