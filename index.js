@@ -3,11 +3,12 @@ require('dotenv').config();
 const app = express();
 const port = process.env.port;
 const db = require('./dbConfig/db');
-const authRoute = require('./Route/authRoute');
 const passport = require('passport');
 const session = require('express-session');
 const {verifay}=require('./Middelware/verifyToken');
+
 const cors=require('cors');
+const mountRouter = require('./Route/indexRouter');
 
 
 app.use(session({
@@ -22,7 +23,7 @@ app.use(passport.session());
 
 app.use(express.json());
 
-app.use('/api', authRoute);
+mountRouter(app);
 app.use('/Home',verifay, (req, res) => {
     res.status(200).json({
         "status": "success",
