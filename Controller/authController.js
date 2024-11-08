@@ -3,7 +3,8 @@ const {generateToken}=require('../Utils/generateToken');
 const {cloudinary}=require('../Middelware/uploadImage');
 
 const asyncHandler=require('express-async-handler');
-const {ErrorHandler}=require('../Utils/ErrorHandler');
+// const {ErrorHandler}=require('../Utils/ErrorHandler');
+const {ErrorHandler} = require('../Utils/ErrorHandler');
 const {sendEmail}=require('../Utils/EmailSender');
 const bcrypt=require('bcrypt');
 const generateActivationCode = () => {
@@ -85,7 +86,7 @@ exports.signUp = asyncHandler(async (req, res, next) => {
          <p>Your activation code is:</p>
          <div class="activation-code">${activationCode}</div>
          <p>Please enter this code to activate your account.</p>
-         <p>Thank you, <br>The YourApp Team</p>
+         <p>Thank you, <br>نبتة</p>
          </html>`
     }
     sendEmail(options)
@@ -129,6 +130,8 @@ exports.activateAccount = asyncHandler (async (req, res) => {
   exports.SendactivationCode=asyncHandler(async (req,res,next)=>{
     const {email}=req.body;
     const user=await userModel.findOne({email:email});
+   
+    
     if(!user)
     {
         return res.status(404).json({
@@ -204,3 +207,56 @@ exports.login=asyncHandler(async (req,res,next)=>{
 })
 
   
+exports.SendForgetPasswordCode=asyncHandler(async (req,res,next)=>{
+    const {email}=req.body;
+    const user=await userModel.findOne(email);
+    if(!user){
+        return next(new ErrorHandler("User not exist",404));
+    }
+    user.resetPasswordToken=generateActivationCode();
+    user.resetPasswordExpires=Date.now()+3600000 ;
+    await user.save();
+    const option={
+        from:process.env.email,
+        to :user.email,
+        subject:"reset password",
+        html:`<html>
+            <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;">
+                <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                    <h2 style="color: #333333;">Password Reset Request</h2>
+                    <p style="font-size: 16px; color: #555555;">Hello ${user.userName},</p>
+                    <p style="font-size: 16px; color: #555555;">
+                        We received a request to reset your password. Use the code below to reset your password. This code will expire in 1 hour.
+                    </p>
+                    <div style="font-size: 24px; font-weight: bold; color: #333333; margin: 20px 0; text-align: center;">
+                        ${user.resetPasswordToken}
+                    </div>
+                    <p style="font-size: 16px; color: #555555;">
+                        If you did not request a password reset, please ignore this email or contact our support.
+                    </p>
+                    <p style="font-size: 16px; color: #555555;">
+                        Thank you,<br>
+                        The Support Team
+                    </p>
+                </div>
+            </body>
+        </html>`
+    }
+    await sendEmail(option);
+    res.status(200).json({ success: true, message: "Password reset code sent to email" });
+});
+
+exports.CodeForgetPassowrd=asyncHandler(async (req,res,next)=>{
+    const user = await userModel.findOne({
+        resetPasswordToken: req.body.token,
+        resetPasswordExpires: { $gt: Date.now() }
+    });
+
+    if(!user)
+    {
+        return res.status(400).send('Password reset token is invalid or has expired.');
+    }
+    
+    res.status(200).json({"message":""})
+
+})

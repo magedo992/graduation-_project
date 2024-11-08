@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const { signUp, activateAccount, 
-    SendactivationCode, login } = require('../Controller/authController');
+    SendactivationCode, login,SendForgetPasswordCode } = require('../Controller/authController');
     const authcon=require('../Controller/authController');
-
+const {googleAuthHandler}=require('../Middelware/passport');
 const { upload, resizeImage } = require('../Middelware/resizeImage');
 const userModel = require('../Model/UserModel');
 require('../Middelware/passport');
@@ -18,12 +18,7 @@ router.post('/SendactivationCode', upload.none(), SendactivationCode);
 router.post('/login', upload.none(),authValidator.login, login);
 
 
-router.get('/auth/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
-
-
-router.get('/auth/callback', passport.authenticate('google', { failureRedirect: '/Home' }), (req, res) => {
- res.status(200).json({token:req.user.token});
- 
-});
+router.post('/auth/google',googleAuthHandler);
+router.post('/auth/sendforgetpasswordcode',SendForgetPasswordCode);
 
 module.exports = router;
