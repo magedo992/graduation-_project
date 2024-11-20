@@ -4,6 +4,8 @@ const app = express();
 const port = process.env.port;
 const db = require('./dbConfig/db');
 const authRoute = require('./Route/authRoute');
+const plantRoute = require('./Route/plantRoute');
+const fertilizerRoute = require('./Route/fertilizerRoute');
 const passport = require('passport');
 const session = require('express-session');
 const {verifay}=require('./Middelware/verifyToken');
@@ -37,6 +39,11 @@ app.use((err, req, res, next) => {
         'errordata': errorMessage
     });
 });
+app.use('/api/plants', plantRoute);
+
+app.use('/fertilizers', fertilizerRoute);
+
+//app.use('/api/plants', plantRoute);
 
 app.listen(port, () => {
     db.connectToDb();
