@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { gender } = require('../Utils/Gender');
 const bcrypt = require('bcrypt');
-const { string } = require('joi');
+const { string, required } = require('joi');
 
 
 
@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     type:String,
 
   },
-  userName: {
+  username: {
     type: String,
     required: true,
   
@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
-    enum: [gender.MALE, gender.FEMALE,gender.UNKNOWN],
+    enum: [gender.MALE, gender.FEMALE,gender.UNKNOWN,gender.maleA,gender.FemaleA],
     required: true
   },
   image: {
@@ -65,8 +65,7 @@ const userSchema = new mongoose.Schema({
 },activationCode: {
   type: String,
   required: false,
-}
-,
+},
 city: {
   type: String,
   //required: [true, "Please enter your city"]
@@ -80,6 +79,11 @@ resetPasswordToken:{
     default:undefined
 } ,
 imagePublicIds:String,
+birthDay:{
+  type:Date,
+  default:undefined
+}
+
 });
 userSchema.pre('save', async function (next) {
   if (!this.isModified("password")) {

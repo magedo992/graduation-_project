@@ -22,7 +22,8 @@ exports.signUpValidation = Joi.object({
   gender: Joi.string().valid('male', 'female', 'other').required(),
   city: Joi.string().min(5).required(),
   state:Joi.string().optional(),
-  username: Joi.string().min(3).max(30).required()
+  username: Joi.string().min(3).max(30).required(),
+  
 });
 
 exports.activateAccountValidation = Joi.object({

@@ -27,7 +27,14 @@ const fertilizerSchema = new Schema({
     {
       url: String,
     },
+   
   ],
+  imagesPublicIds:[
+    {
+      url:String,
+      _id: false
+    }
+  ]
 });
 
 module.exports = mongoose.model('fertilizer', fertilizerSchema);

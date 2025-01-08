@@ -5,7 +5,7 @@ const asyncHandler = require('express-async-handler');
 const {ErrorHandler} = require('../Utils/ErrorHandler'); 
 
 exports.create = asyncHandler(async (req, res, next) => {
-    // Function to upload a file buffer to Cloudinary
+   
     const uploadFromBuffer = (fileBuffer) => {
         return new Promise((resolve, reject) => {
             if (!fileBuffer) {
@@ -38,9 +38,35 @@ exports.create = asyncHandler(async (req, res, next) => {
    
     const fertilizer = new fertilizerModel({
         ...req.body,
-        images: results.map(result => ({ url: result.secure_url })) 
+        images: results.map(result => ({ url: result.secure_url })),
+        imagesPublicIds:results.map(result=>({url:result.public_id })) 
     });
+
 
     await fertilizer.save();
     res.status(201).send(fertilizer);
 });
+
+
+exports.delete= asyncHandler(async (req,res,next)=>{
+    const id=req.params.Fertilizer_id;
+    const fertilizer=await fertilizerModel.findByIdAndDelete(id);
+
+    if(!fertilizer)
+    {
+        return res.status(404).json({"message":"fertilizer not found"});
+    }  
+    const deleteImagePromises = fertilizer.imagesPublicIds.map(image =>
+        cloudinary.api.delete_resources(image.url),
+  );
+    
+        await Promise.all(deleteImagePromises);
+
+       
+        res.status(200).json({ message: "Fertilizer deleted successfully" });
+})
+
+exports.showAll=asyncHandler(async (req,res,next)=>{
+   const fertilizer=await fertilizerModel.find({},{"__v":false,"imagesPublicIds":false,"images._id":false});
+   res.status(200).json({"data":fertilizer});
+})

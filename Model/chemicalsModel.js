@@ -36,6 +36,12 @@ images:[
     url:String,
 }
      ],
+     imagesPublicIds:[
+        {
+          url:String,
+          _id: false
+        }
+      ]
 
 });
 

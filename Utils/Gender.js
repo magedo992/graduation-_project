@@ -1,5 +1,7 @@
 exports.gender={
     "MALE":"male",
     "FEMALE":"female",
-    "UNKNOWN":"UNKNOWN"
+    "UNKNOWN":"UNKNOWN",
+    "maleA":"ذكر",
+    "FemaleA":"أنثى"
 }

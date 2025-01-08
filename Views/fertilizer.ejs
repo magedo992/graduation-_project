@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Fertilizer</title>
+    <script>
+        function toggleFields() {
+            const fertilizerType = document.getElementById('FertilizerType').value;
+            const nutrientFields = document.getElementById('nutrientFields');
+            
+            if (fertilizerType === 'inorganic') {
+                nutrientFields.style.display = 'block';
+            } else {
+                nutrientFields.style.display = 'none';
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, textarea, button {
+            display: block;
+            margin-bottom: 15px;
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>Create Fertilizer</h1>
+    <form action="/fertilizer/createFertilizer" method="POST" enctype="multipart/form-data">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="FertilizerType">Fertilizer Type:</label>
+        <select id="FertilizerType" name="FertilizerType" onchange="toggleFields()" required>
+            <option value="">-- Select Type --</option>
+            <option value="organic">Organic</option>
+            <option value="inorganic">Inorganic</option>
+        </select>
+
+        <div id="nutrientFields" style="display: none;">
+            <label for="NitrogenPercentage">Nitrogen Percentage:</label>
+            <input type="number" id="NitrogenPercentage" name="NitrogenPercentage" step="0.01" min="0">
+
+            <label for="PotassiumPercentage">Potassium Percentage:</label>
+            <input type="number" id="PotassiumPercentage" name="PotassiumPercentage" step="0.01" min="0">
+
+            <label for="PhosphorusPercentage">Phosphorus Percentage:</label>
+            <input type="number" id="PhosphorusPercentage" name="PhosphorusPercentage" step="0.01" min="0">
+        </div>
+
+        <label for="pricePerKg">Price Per Kg:</label>
+        <input type="number" id="pricePerKg" name="pricePerKg" step="0.01" min="0" required>
+
+        <label for="images">Upload Images:</label>
+        <input type="file" id="images" name="Images" multiple required>
+
+        <button type="submit">Create Fertilizer</button>
+    </form>
+</body>
+</html>

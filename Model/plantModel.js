@@ -28,7 +28,12 @@ const plantSchema = new mongoose.Schema({
     }],
     images: [{
       url: String,
-    }],
+    }], imagesPublicIds:[
+      {
+        url:String,
+        _id: false
+      }
+    ]
   });
 
 module.exports=mongoose.model('plant',plantSchema);

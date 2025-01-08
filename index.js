@@ -6,17 +6,24 @@ const db = require('./dbConfig/db');
 const passport = require('passport');
 const session = require('express-session');
 const {verifay}=require('./Middelware/verifyToken');
-
+const path=require('path')
+const methodOverride = require('method-override');
 const cors=require('cors');
 const mountRouter = require('./Route/indexRouter');
 
+app.set('view engine', 'ejs');
+app.use(methodOverride('_method'));
+app.set('Views', path.join(__dirname, 'Views'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json()); // Parse JSON requests
+app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
     secret: process.env.JWT,   
     resave: false,
     saveUninitialized: true
 }));
-app.use(cors());
+app.use(cors({origin:'*'}));
 app.use(passport.initialize());
 app.use(passport.session());  
 
@@ -36,7 +43,7 @@ app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
     res.status(statusCode).json({
         'status': 'error',
-        'errordata': errorMessage
+        'message': errorMessage
     });
 });
 

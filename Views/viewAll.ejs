@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Chemicals</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        li {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: calc(33.333% - 40px);
+            box-sizing: border-box;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #555;
+            margin: 5px 0;
+        }
+
+        img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #c82333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            li {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            li {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>All Chemicals</h1>
+    <a href="/chemical/create">Add New Chemical</a>
+    <ul>
+        <% chemicals.forEach(chemical => { %>
+            <li>
+                <h2><%= chemical.name %></h2>
+                <p>Type: <%= chemical.ChemicalsType %></p>
+                <p>Price per KG: $<%= chemical.pricePerKG %></p>
+                <% if (chemical.images && chemical.images.length > 0) { %>
+                    <div>
+                        <% chemical.images.forEach(image => { %>
+                            <img src="<%= image.url %>" alt="Chemical Image">
+                        <% }) %>
+                    </div>
+                <% } %>
+                <a href="/chemical/<%= chemical._id %>?_method=GET">View Details</a>
+                <form action="/chemical/<%= chemical._id %>?_method=DELETE" method="POST" style="display: inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>
