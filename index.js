@@ -31,6 +31,9 @@ app.use(passport.session());
 app.use(express.json());
 
 mountRouter(app);
+app.use('/',(req,res)=>{
+    res.status(200).send("hello world");
+});
 app.use('/Home',verifay, (req, res) => {
     res.status(200).json({
         "status": "success",
