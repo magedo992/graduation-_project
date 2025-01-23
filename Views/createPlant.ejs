@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Plant</title>
+    <title>إنشاء نبات جديد</title>
     <style>
         /* General Styles */
         body {
@@ -50,6 +50,11 @@
             transition: border-color 0.3s ease;
         }
 
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
         input:focus, select:focus, textarea:focus {
             border-color: #28a745;
             outline: none;
@@ -70,16 +75,15 @@
             background-color: #218838;
         }
 
-        /* Multiple Select Styling */
-        select[multiple] {
-            height: 120px;
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        /* File Input Styling */
-        input[type="file"] {
-            padding: 8px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
         }
 
         /* Responsive Design */
@@ -96,45 +100,117 @@
 </head>
 <body>
     <form action="/plant/create" method="POST" enctype="multipart/form-data">
-        <h1>Create a New Plant</h1>
+        <h1>إنشاء نبات جديد</h1>
 
-        <label for="name">Name:</label>
+        <!-- اسم النبات -->
+        <label for="name">اسم النبات:</label>
         <input type="text" name="name" id="name" required>
 
-        <label for="season">Season:</label>
+        <!-- نوع التربة -->
+        <label for="soilType">نوع التربة:</label>
+        <select name="soilType" id="soilType" required>
+            <option value="رملي">رملي</option>
+            <option value="طيني">طيني</option>
+            <option value="طمي">طمي</option>
+            <option value="خصب">خصب</option>
+        </select>
+
+        <!-- متطلبات الإضاءة -->
+        <label for="lightRequirements">متطلبات الإضاءة:</label>
+        <select name="lightRequirements" id="lightRequirements" required>
+            <option value="شمس كاملة">شمس كاملة</option>
+            <option value="ظل جزئي">ظل جزئي</option>
+            <option value="ظل">ظل</option>
+        </select>
+
+        <!-- متطلبات الماء -->
+        <label for="waterRequirements">متطلبات الماء:</label>
+        <select name="waterRequirements" id="waterRequirements" required>
+            <option value="عالية">عالية</option>
+            <option value="متوسطة">متوسطة</option>
+            <option value="منخفضة">منخفضة</option>
+        </select>
+
+        <!-- نطاق درجة الحرارة -->
+        <label for="temperatureRange">نطاق درجة الحرارة:</label>
+        <input type="text" name="temperatureRange" id="temperatureRange" required>
+
+        <!-- الموسم -->
+        <label for="season">الموسم:</label>
         <input type="text" name="season" id="season" required>
 
-        <label for="growthDuration">Growth Duration (days):</label>
+        <!-- مدة النمو -->
+        <label for="growthDuration">مدة النمو (بالأيام):</label>
         <input type="number" name="growthDuration" id="growthDuration" required>
 
-        <label for="waterRequirements">Water Requirements:</label>
-        <select name="waterRequirements" id="waterRequirements" required>
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
+        <!-- التباعد -->
+        <label for="spacing">التباعد (اختياري):</label>
+        <input type="text" name="spacing" id="spacing">
+
+        <!-- متطلبات الرطوبة -->
+        <label for="humidityRequirements">متطلبات الرطوبة:</label>
+        <select name="humidityRequirements" id="humidityRequirements">
+            <option value="عالية">عالية</option>
+            <option value="متوسطة">متوسطة</option>
+            <option value="منخفضة">منخفضة</option>
         </select>
 
-        <label for="commonDiseases">Common Diseases (comma-separated):</label>
+        <!-- الغرض -->
+        <label for="purpose">الغرض:</label>
+        <select name="purpose" id="purpose">
+            <option value="زينة">زينة</option>
+            <option value="طعام">طعام</option>
+            <option value="طبي">طبي</option>
+        </select>
+
+        <!-- طريقة الزراعة -->
+        <label for="plantingMethod">طريقة الزراعة:</label>
+        <select name="plantingMethod" id="plantingMethod">
+            <option value="بذور">بذور</option>
+            <option value="قصاصات">قصاصات</option>
+            <option value="شتلات">شتلات</option>
+        </select>
+
+        <!-- متطلبات خاصة -->
+        <label for="specialRequirements">متطلبات خاصة (اختياري):</label>
+        <textarea name="specialRequirements" id="specialRequirements"></textarea>
+
+        <!-- الأمراض الشائعة -->
+        <label for="commonDiseases">الأمراض الشائعة (مفصولة بفاصلة):</label>
         <input type="text" name="commonDiseases" id="commonDiseases">
 
-        <label for="recommendedFertilizers">Recommended Fertilizers:</label>
-        <select name="recommendedFertilizers" id="recommendedFertilizers" multiple>
+        <!-- الأسمدة -->
+        <label for="Fertilizers">الأسمدة الموصى بها:</label>
+        <div class="checkbox-group">
             <% fertilizers.forEach(fertilizer => { %>
-                <option value="<%= fertilizer._id %>"><%= fertilizer.name %></option>
+                <label>
+                    <input type="checkbox" name="Fertilizers" value="<%= fertilizer._id %>">
+                    <%= fertilizer.name %>
+                </label>
             <% }); %>
-        </select>
+        </div>
 
-        <label for="recommendedChemicals">Recommended Chemicals:</label>
-        <select name="recommendedChemicals" id="recommendedChemicals" multiple>
+        <!-- المواد الكيميائية -->
+        <label for="Chemicals">المواد الكيميائية:</label>
+        <div class="checkbox-group">
             <% chemicals.forEach(chemical => { %>
-                <option value="<%= chemical._id %>"><%= chemical.name %></option>
+                <label>
+                    <input type="checkbox" name="Chemicals" value="<%= chemical._id %>">
+                    <%= chemical.name %>
+                </label>
             <% }); %>
-        </select>
+        </div>
 
-        <label for="Images">Upload Images:</label>
-        <input type="file" name="Images" id="Images" multiple>
+        <!-- الصور -->
+        <label for="images">تحميل الصور:</label>
+        <input type="file" name="images" id="images" multiple>
 
-        <button type="submit">Create Plant</button>
+        <!-- الوصف -->
+        <label for="description">الوصف:</label>
+        <textarea name="description" id="description"></textarea>
+
+        <!-- زر الإرسال -->
+        <button type="submit">إنشاء النبات</button>
     </form>
 </body>
 </html>

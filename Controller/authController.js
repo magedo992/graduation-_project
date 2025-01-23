@@ -120,7 +120,7 @@ exports.activateAccount = asyncHandler (async (req, res) => {
     }
 
     let activationCode=generateActivationCode();
-    user.activationCode=activationCode;
+    user.activationCode=await bcrypt.hash(activationCode,10);
     await user.save();
      activationCode=activationCode.toString();
     sendActivationcode(user.email,user.username.split(' ')[0],activationCode);
@@ -139,7 +139,7 @@ exports.login=asyncHandler(async (req,res,next)=>{
     {
         
         let activationCode=generateActivationCode();
-        user.activationCode=activationCode;
+        user.activationCode=await bcrypt.hash(activationCode,10);s
         await user.save();
         sendActivationcode(user.email,user.username.split(' ')[0],activationCode);
 
@@ -164,44 +164,84 @@ exports.login=asyncHandler(async (req,res,next)=>{
 })
 
   
-exports.SendForgetPasswordCode=asyncHandler(async (req,res,next)=>{
-    const {email}=req.body;
-    const user=await userModel.findOne(email);
-    if(!user){
-        return next(new ErrorHandler("User not exist",404));
-    }
-    if(!user.isActive)
-    {
-        let activationCode=generateActivationCode();
-        user.activationCode=activationCode;
-        await user.save();
-        sendActivationcode(user.email,user.username.split(' ')[0],activationCode);
-
-        
-            return res.status(200).json({"message":"Please check your email for the activation code."});
-    
-    }
-    user.resetPasswordToken=generateActivationCode();
-    let code=user.resetPasswordToken;
-    
-    user.resetPasswordExpires=Date.now()+3600000 ;
+exports.SendForgetPasswordCode = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+  const user = await userModel.findOne({ email: email });
+  console.log(user);
+  if (!user) {
+    console.log("error");
+    return next(new ErrorHandler("User not exist", 404));
+  }
+  if (!user.isActive) {
+    let activationCode = generateActivationCode();
+    user.activationCode = await bcrypt.hash(activationCode.toString(), 10); // Convert to string
     await user.save();
-   
-   sendForgetPasswordCode(user.email,user.username.split(' ')[0],code);
-    res.status(200).json({ success: true, message: "Password reset code sent to email" });
+    sendActivationcode(user.email, user.username.split(' ')[0], activationCode.toString());
+
+    return res.status(200).json({ message: "Please check your email for the activation code." });
+  }
+  let code = generateActivationCode();
+  user.resetPasswordToken = await bcrypt.hash(code.toString(), 10); // Convert to string
+  user.resetPasswordExpires = Date.now() + 3600000;
+  await user.save();
+
+  sendForgetPasswordCode(user.email, user.username.split(' ')[0], code.toString());
+
+  res.status(200).json({ success: true, message: "Password reset code sent to email" });
 });
 
-exports.CodeForgetPassowrd=asyncHandler(async (req,res,next)=>{
-    const user = await userModel.findOne({
-        resetPasswordToken: req.body.token,
-        resetPasswordExpires: { $gt: Date.now() }
+exports.CodeForgetPassword = asyncHandler(async (req, res, next) => {
+  const { email, ForgetPasswordcode } = req.body;
+
+  
+  const user = await userModel.findOne({
+    email: email,
+    resetPasswordExpires: { $gt: Date.now() } 
+  });
+
+  if (!user) {
+    return res.status(400).json({
+      message: "Password reset token is invalid or has expired."
     });
+  }
 
-    if(!user)
-    {
-        return res.status(400).send('Password reset token is invalid or has expired.');
-    }
+  const isMatch = await bcrypt.compare(ForgetPasswordcode, user.resetPasswordToken);
+  if (!isMatch) {
+    return res.status(400).json({
+      message: "Invalid code"
+    });
+  }
+
+  user.resetPasswordToken = undefined;
+  await user.save(); 
+
+  res.status(200).json({
+    message: "Password reset token is valid. You can now reset your password."
+  });
+});
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+  const { email, newPassword } = req.body;
+
+  if (!email || !newPassword) {
+  
     
-    res.status(200).json({"message":""})
+      return res.status(400).json({ message: 'Token and new password are required' });
+  }
 
-})
+  const user = await userModel.findOne({
+     
+email:email,resetPasswordExpires: { $gt: Date.now() }
+  });
+
+  if (!user) {
+      return res.status(400).json({ message: 'Password reset token is invalid or has expired.' });
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  user.password = hashedPassword;
+  user.resetPasswordExpires=undefined;
+  const token=generateToken({email:user.email});
+  res.status(200).json({token:token});
+
+});

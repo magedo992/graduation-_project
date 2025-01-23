@@ -82,7 +82,10 @@ imagePublicIds:String,
 birthDay:{
   type:Date,
   default:undefined
-}
+},plants: [{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'Plant'
+}]
 
 });
 userSchema.pre('save', async function (next) {

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const chemicalController = require('../Controller/chemicalsController');
 const { upload, resizeImages } = require('../Middelware/resizeImage');
+const {verifay}=require('../Middelware/verifyToken');
 
 router.get('/create',(req,res)=>{
     res.render('createChemical');

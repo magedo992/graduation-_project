@@ -53,9 +53,10 @@ exports.create=asyncHandler(async (req,res,next)=>{
 
 exports.getAll=asyncHandler(async (req,res,next)=>{
 const plants=await plantModel.find().populate({
-    path:"recommendedFertilizers",
+    path:"Fertilizers",
     select:"name FertilizerType",
-});
+}).populate({path:"Chemicals",
+    select:"name"},{"__id":false});
 
 if(!plants)
 {
