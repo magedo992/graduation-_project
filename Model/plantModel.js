@@ -1,3 +1,5 @@
+
+const { required } = require('joi');
 const mongoose = require('mongoose');
 
 const plantSchema = new mongoose.Schema({
@@ -68,7 +70,13 @@ const plantSchema = new mongoose.Schema({
   }],
   description: {
     type: String,
-    required: false, // You can set this to true if you want it to be required
+    required: false, 
+  },
+  category:{
+    type:String,
+    enum:['النباتات الطبية','النباتات العطرية','النباتات الغذائية','النباتات الصناعية','الفواكه','الخضروات','نباتات الزينة',
+      'النباتات البرية'],
+    required:true
   }
 });
 

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إنشاء نبات جديد</title>
     <style>
-        /* General Styles */
+     
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f4f4f9;
@@ -86,7 +86,7 @@
             align-items: center;
         }
 
-        /* Responsive Design */
+     
         @media (max-width: 600px) {
             form {
                 padding: 1rem;
@@ -102,11 +102,11 @@
     <form action="/plant/create" method="POST" enctype="multipart/form-data">
         <h1>إنشاء نبات جديد</h1>
 
-        <!-- اسم النبات -->
+      
         <label for="name">اسم النبات:</label>
         <input type="text" name="name" id="name" required>
 
-        <!-- نوع التربة -->
+       
         <label for="soilType">نوع التربة:</label>
         <select name="soilType" id="soilType" required>
             <option value="رملي">رملي</option>
@@ -115,7 +115,7 @@
             <option value="خصب">خصب</option>
         </select>
 
-        <!-- متطلبات الإضاءة -->
+        
         <label for="lightRequirements">متطلبات الإضاءة:</label>
         <select name="lightRequirements" id="lightRequirements" required>
             <option value="شمس كاملة">شمس كاملة</option>
@@ -123,7 +123,7 @@
             <option value="ظل">ظل</option>
         </select>
 
-        <!-- متطلبات الماء -->
+     
         <label for="waterRequirements">متطلبات الماء:</label>
         <select name="waterRequirements" id="waterRequirements" required>
             <option value="عالية">عالية</option>
@@ -131,23 +131,23 @@
             <option value="منخفضة">منخفضة</option>
         </select>
 
-        <!-- نطاق درجة الحرارة -->
+       
         <label for="temperatureRange">نطاق درجة الحرارة:</label>
         <input type="text" name="temperatureRange" id="temperatureRange" required>
 
-        <!-- الموسم -->
+       
         <label for="season">الموسم:</label>
         <input type="text" name="season" id="season" required>
 
-        <!-- مدة النمو -->
+       
         <label for="growthDuration">مدة النمو (بالأيام):</label>
         <input type="number" name="growthDuration" id="growthDuration" required>
 
-        <!-- التباعد -->
+      
         <label for="spacing">التباعد (اختياري):</label>
         <input type="text" name="spacing" id="spacing">
 
-        <!-- متطلبات الرطوبة -->
+        
         <label for="humidityRequirements">متطلبات الرطوبة:</label>
         <select name="humidityRequirements" id="humidityRequirements">
             <option value="عالية">عالية</option>
@@ -155,7 +155,7 @@
             <option value="منخفضة">منخفضة</option>
         </select>
 
-        <!-- الغرض -->
+       
         <label for="purpose">الغرض:</label>
         <select name="purpose" id="purpose">
             <option value="زينة">زينة</option>
@@ -163,7 +163,7 @@
             <option value="طبي">طبي</option>
         </select>
 
-        <!-- طريقة الزراعة -->
+        
         <label for="plantingMethod">طريقة الزراعة:</label>
         <select name="plantingMethod" id="plantingMethod">
             <option value="بذور">بذور</option>
@@ -171,15 +171,27 @@
             <option value="شتلات">شتلات</option>
         </select>
 
-        <!-- متطلبات خاصة -->
+       
+        <label for="category">التصنيف:</label>
+        <select name="category" id="category" required>
+            <option value="النباتات الطبية">النباتات الطبية</option>
+            <option value="النباتات العطرية">النباتات العطرية</option>
+            <option value="النباتات الغذائية">النباتات الغذائية</option>
+            <option value="النباتات الصناعية">النباتات الصناعية</option>
+            <option value="الفواكه">الفواكه</option>
+            <option value="الخضروات">الخضروات</option>
+            <option value="نباتات الزينة">نباتات الزينة</option>
+            <option value="النباتات البرية">النباتات البرية</option>
+        </select>
+
+        
         <label for="specialRequirements">متطلبات خاصة (اختياري):</label>
         <textarea name="specialRequirements" id="specialRequirements"></textarea>
 
-        <!-- الأمراض الشائعة -->
         <label for="commonDiseases">الأمراض الشائعة (مفصولة بفاصلة):</label>
         <input type="text" name="commonDiseases" id="commonDiseases">
 
-        <!-- الأسمدة -->
+       
         <label for="Fertilizers">الأسمدة الموصى بها:</label>
         <div class="checkbox-group">
             <% fertilizers.forEach(fertilizer => { %>
@@ -190,7 +202,7 @@
             <% }); %>
         </div>
 
-        <!-- المواد الكيميائية -->
+      
         <label for="Chemicals">المواد الكيميائية:</label>
         <div class="checkbox-group">
             <% chemicals.forEach(chemical => { %>
@@ -201,15 +213,15 @@
             <% }); %>
         </div>
 
-        <!-- الصور -->
-        <label for="images">تحميل الصور:</label>
-        <input type="file" name="images" id="images" multiple>
+        
+        <label for="Images">تحميل الصور:</label>
+        <input type="file" name="Images" id="Images" multiple>
 
-        <!-- الوصف -->
+       
         <label for="description">الوصف:</label>
         <textarea name="description" id="description"></textarea>
 
-        <!-- زر الإرسال -->
+       
         <button type="submit">إنشاء النبات</button>
     </form>
 </body>

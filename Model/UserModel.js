@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema({
   gender: {
     type: String,
     enum: [gender.MALE, gender.FEMALE,gender.UNKNOWN,gender.maleA,gender.FemaleA],
-    required: true
+   
   },
   image: {
     type: String,
@@ -68,11 +68,10 @@ const userSchema = new mongoose.Schema({
 },
 city: {
   type: String,
-  //required: [true, "Please enter your city"]
 },
 state: {
   type: String,
-  //required: [true, "Please enter your state"]
+ 
 },
 resetPasswordToken:{
     type:String,
@@ -85,9 +84,11 @@ birthDay:{
 },plants: [{
   type: mongoose.Schema.Types.ObjectId,
   ref: 'Plant'
-}]
+}],
 
 });
+userSchema.index({ email: 1 }, { unique: true });
+userSchema.index({ googleId: 1 }, { sparse: true });
 userSchema.pre('save', async function (next) {
   if (!this.isModified("password")) {
     return next();

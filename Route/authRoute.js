@@ -1,26 +1,31 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
-const { signUp, activateAccount, 
-    SendactivationCode, login,SendForgetPasswordCode,resetPassword,CodeForgetPassword } = require('../Controller/authController');
-    const authcon=require('../Controller/authController');
-const {googleAuthHandler}=require('../Middelware/passport');
-const { upload, resizeImage } = require('../Middelware/resizeImage');
-const userModel = require('../Model/UserModel');
-require('../Middelware/passport');
-const googleController=require('../Controller/GoogleController');
 
-const authValidator=require('../Middelware/Validator/authValidator');
+const { signUp, activateAccount, 
+    SendactivationCode, login,
+    SendForgetPasswordCode,
+    CodeForgetPassowrd,ResetPassword
+     } = require('../Controller/authController');
+    
+const { upload, resizeImage } = require('../Middelware/resizeImage');
+
+
+const {googleAuth}=require('../Controller/GoogleController');
+
+
 
 router.post('/signup', upload.single('ProfileImage'), resizeImage({ width: 600, height: 600, quality: 90 })
 , signUp);
 router.post('/activateAccount', upload.none(), activateAccount);
 router.post('/SendactivationCode', upload.none(), SendactivationCode);
-router.post('/login', upload.none(),authValidator.login, login);
-router.post('/ActiveForgetPasswordCode',upload.none(),CodeForgetPassword);
-router.post('/resetPassword',upload.none(),resetPassword)
-router.post('/auth/google',googleController.googleAuth);
+router.post('/login', upload.none(), login);
+router.post('/ActiveForgetPasswordCode',upload.none());
+// router.post('/resetPassword',upload.none(),resetPassword)
 router.post('/auth/sendforgetpasswordcode',upload.none(),SendForgetPasswordCode);
+router.post('/auth/codeForgetPassword',upload.none(),CodeForgetPassowrd);
+router.post('/auth/ResetPassword',upload.none(),ResetPassword)
+router.post('/auth/googleoauth',upload.none(),googleAuth);
+
 
 
 module.exports = router;

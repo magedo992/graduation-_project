@@ -4,10 +4,13 @@ const sendEmail=(option)=>{
         service:"Gmail",
         host:"smtp.gmail.com",
         port:587,
+        secure: false,
         auth:{
-            user:process.env.Email,
-            pass:process.env.Pass
-        }
+            user:process.env.email,
+            pass:process.env.pass
+        },tls: {
+            rejectUnauthorized: false
+        },
     });
     transport.sendMail(option,(err,info)=>{
         if(err)

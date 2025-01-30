@@ -3,7 +3,7 @@ require('dotenv').config();
 const app = express();
 const port = process.env.port;
 const db = require('./dbConfig/db');
-const passport = require('passport');
+
 const session = require('express-session');
 const {verifay}=require('./Middelware/verifyToken');
 const path=require('path')
@@ -13,7 +13,7 @@ const mountRouter = require('./Route/indexRouter');
 
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
-app.set('Views', path.join(__dirname, 'Views'));
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json()); // Parse JSON requests
 app.use(express.urlencoded({ extended: true }));
@@ -24,20 +24,14 @@ app.use(session({
     saveUninitialized: true
 }));
 app.use(cors({origin:'*'}));
-app.use(passport.initialize());
-app.use(passport.session());  
+ 
 
 
 app.use(express.json());
 
 mountRouter(app);
 
-app.use('/Home',verifay, (req, res) => {
-    res.status(200).json({
-        "status": "success",
-        "data": "hello world"
-    });
-});
+
 
 app.use((err, req, res, next) => {
     const errorMessage = err.message;
