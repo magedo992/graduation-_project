@@ -2,18 +2,16 @@ const plantModel=require('../Model/plantModel');
 const asyncHandler=require('express-async-handler');
 const cloudinary = require('cloudinary').v2;
 const streamifier = require('streamifier');
-const fertilizerModel = require('../Model/fertilizerModel');
-const chemicalModel = require('../Model/chemicalsModel');
+const {ErrorHandler}=require('../Utils/ErrorHandler.js');
 
 
 
 
 
 exports.createPlantView = asyncHandler(async (req, res, next) => {
-    const fertilizers = await fertilizerModel.find(); 
-    const chemicals = await chemicalModel.find(); 
+ 
 
-    res.render('createPlant', { fertilizers, chemicals }); 
+    res.render('createPlant'); 
 });
 exports.create=asyncHandler(async (req,res,next)=>{
      const uploadFromBuffer = (fileBuffer) => {
@@ -52,11 +50,7 @@ exports.create=asyncHandler(async (req,res,next)=>{
 
 
 exports.getAll=asyncHandler(async (req,res,next)=>{
-const plants=await plantModel.find().populate({
-    path:"Fertilizers",
-    select:"name FertilizerType",
-},{"__id":false}).populate({path:"Chemicals",
-    select:"name"},{"__id":false});
+const plants=await plantModel.find({},{"__v":false});
 
 if(!plants)
 {
