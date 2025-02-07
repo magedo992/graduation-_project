@@ -33,9 +33,7 @@ exports.create=asyncHandler(async (req,res,next)=>{
                 streamifier.createReadStream(fileBuffer).pipe(uploadStream);
             });
         };
-    if (!req.files || req.files.length === 0) {
-        return next(new ErrorHandler("No files uploaded", 400));
-    }
+  
     const uploadPromises = req.files.map(file => uploadFromBuffer(file.buffer));
     const results = await Promise.all(uploadPromises);
 
@@ -79,5 +77,18 @@ exports.deletepalnts=asyncHandler(async (req,res,next)=>{
     await Promise.all(deleteImagePromises)
 
     res.status(200).send("plant deleted successfully");
+
+});
+
+exports.getOne=asyncHandler(async (req,res,next)=>{
+    const plant=await plantModel.findById(req.params.Id);
+    console.log(plant);
+    
+    if(!plant)
+    {
+        return res.status(404).json({"message":"plant not found"});
+
+    }
+    return res.status(200).json({data:plant});
 
 })
