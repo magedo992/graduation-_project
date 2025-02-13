@@ -13,7 +13,7 @@ const mountRouter = require('./Route/indexRouter');
 
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
-app.set('view', path.join(__dirname, 'view'));
+app.set('views', path.join(__dirname,'view'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
