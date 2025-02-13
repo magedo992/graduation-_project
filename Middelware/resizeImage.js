@@ -24,7 +24,7 @@ const resizeImage = (options) => {
       const resizedImageBuffer = await sharp(imageBuffer)
         .resize(width, height, { fit: 'contain', background }) 
         .rotate()
-        .toFormat('jpeg')
+        .toFormat('png')
         .jpeg({ quality: quality })
         .toBuffer();
 
@@ -57,7 +57,7 @@ const resizeImages = (options) => {
         const resizedImageBuffer = await sharp(file.buffer)
           .resize(width, height, { fit: 'contain', background }) 
           .rotate()
-          .toFormat('jpeg')
+          .toFormat('png')
           .jpeg({ quality: quality })
           .toBuffer();
 

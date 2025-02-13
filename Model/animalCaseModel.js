@@ -7,14 +7,14 @@ const animalCaseSchema = new mongoose.Schema({
         required: true
     },
     originDetermination: {
-        insectRelatedIssues: Boolean,  
-        bacterialIssues: Boolean,      
-        viralIssues: Boolean,          
-        infectionsAndParasites: Boolean, 
-        newIssues: Boolean,            
-        respiratoryIssues: Boolean,    
-        traumasAndInheritance: Boolean, 
-        notDetermined: Boolean         
+        insectRelatedIssues: [String],  
+        bacterialIssues: [String],      
+        viralIssues: [String],          
+        infectionsAndParasites: [String], 
+        newIssues: [String],            
+        respiratoryIssues: [String],    
+        traumasAndInheritance: [String], 
+        notDetermined: [String]         
     },
     diagnosticQuestions: {
         naturalBehavior: String, 
