@@ -25,7 +25,7 @@ exports.googleAuth= asyncHandler(async (req, res) => {
             city:null
           })
       }
-      console.log(user);
+      
      const token= generateToken({id:user._id});
      user.token=token;
      await user.save();
