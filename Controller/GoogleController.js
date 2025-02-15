@@ -20,7 +20,7 @@ exports.googleAuth= asyncHandler(async (req, res) => {
             googleId:uid,
             image:photoURL,
             isActive:true,
-            phone:null,
+            phone:undefined,
             birthDay:null,
             city:null
           })
