@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const animalCaseSchema = new mongoose.Schema({
     animalType: {
         type: String,
@@ -8,20 +7,20 @@ const animalCaseSchema = new mongoose.Schema({
         required: true
     },
     originDetermination: {
-        insectRelatedIssues: Boolean,  
-        bacterialIssues: Boolean,      
-        viralIssues: Boolean,          
-        infectionsAndParasites: Boolean, 
-        newIssues: Boolean,            
-        respiratoryIssues: Boolean,    
-        traumasAndInheritance: Boolean, 
-        notDetermined: Boolean         
+        insectRelatedIssues: [String],  
+        bacterialIssues: [String],      
+        viralIssues: [String],          
+        infectionsAndParasites: [String], 
+        newIssues: [String],            
+        respiratoryIssues: [String],    
+        traumasAndInheritance: [String], 
+        notDetermined: [String]         
     },
     diagnosticQuestions: {
         naturalBehavior: String, 
         drinksWater: String,
         movesNormally: String,
-        normalAppetite: String,
+        breathingNormally: String, 
         regularExcretion: String,
         hairLossOrSkinIssues: String,
         previousSimilarSymptoms: String,
@@ -32,16 +31,21 @@ const animalCaseSchema = new mongoose.Schema({
         responsiblePersonName: String, 
         responsiblePersonPhone: String, 
         caseAddress: String, 
-        caseLocation: String 
+        caseLocation: {
+            type: { type: String, enum: ['Point'], default: 'Point' },
+            coordinates: { type: [Number], required: true }
+        } 
     },
     images: [{
         url: String, 
         publicId: String 
-    }]
+    }],
+    notes: {
+        type: String,
+        default: ''
+    }
 });
 
-
 const AnimalCase = mongoose.model('AnimalCase', animalCaseSchema);
-
 
 module.exports = AnimalCase;

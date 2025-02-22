@@ -20,13 +20,15 @@ exports.googleAuth= asyncHandler(async (req, res) => {
             googleId:uid,
             image:photoURL,
             isActive:true,
-            phone:null,
+            phone:undefined,
             birthDay:null,
             city:null
           })
       }
-      console.log(user);
+      
      const token= generateToken({id:user._id});
+     user.token=token;
+     await user.save();
     
      res.status(200).json({token:token});
 })

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إدخال بيانات النبات</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    input[type="text"],
+    select,
+    textarea {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+  </style>
+  <script>
+    // إضافة مستمع لحدث إرسال النموذج
+    const form = document.querySelector('form');
+  
+    form.addEventListener('submit', function (event) {
+      event.preventDefault(); // منع السلوك الافتراضي لإعادة تحميل الصفحة
+  
+      const formData = new FormData(form);
+  
+      // إرسال البيانات باستخدام Fetch API
+      fetch(form.action, {
+        method: form.method,
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('تم إدخال البيانات بنجاح!');
+          location.reload(); // إعادة تحميل الصفحة
+        } else {
+          alert('حدث خطأ أثناء إدخال البيانات.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('تعذر الاتصال بالخادم.');
+      });
+    });
+  </script>
+  
+</head>
+<body>
+  <div class="container">
+    <h1>إدخال بيانات النبات</h1>
+    <form action="/plant/create" method="POST" enctype="multipart/form-data">
+      <!-- اسم النبات -->
+      <div class="form-group">
+        <label for="name">اسم النبات:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+
+      <!-- نوع التربة -->
+      <div class="form-group">
+        <label for="soilType">نوع التربة:</label>
+        <input type="text" id="soilType" name="soilType" required>
+      </div>
+
+      <!-- احتياج الضوء -->
+      <div class="form-group">
+        <label for="lightRequirements">احتياج الضوء:</label>
+        <select id="lightRequirements" name="lightRequirements" required>
+          <option value="عالي">عالي</option>
+          <option value="متوسط">متوسط</option>
+          <option value="منخفض">منخفض</option>
+        </select>
+      </div>
+
+      <!-- احتياج الماء -->
+      <div class="form-group">
+        <label for="waterRequirements">احتياج الماء:</label>
+        <select id="waterRequirements" name="waterRequirements" required>
+          <option value="عالي">عالي</option>
+          <option value="متوسط">متوسط</option>
+          <option value="منخفض">منخفض</option>
+        </select>
+      </div>
+
+      <!-- نطاق الحرارة -->
+      <div class="form-group">
+        <label for="temperatureRange">نطاق الحرارة:</label>
+        <input type="text" id="temperatureRange" name="temperatureRange" required>
+      </div>
+
+      <!-- الموسم -->
+      <div class="form-group">
+        <label for="season">الموسم:</label>
+        <input type="text" id="season" name="season" required>
+      </div>
+
+      <!-- مدة النمو -->
+      <div class="form-group">
+        <label for="growthDuration">مدة النمو:</label>
+        <input type="text" id="growthDuration" name="growthDuration" required>
+      </div>
+
+      <!-- المسافة بين النباتات -->
+      <div class="form-group">
+        <label for="spacing">المسافة بين النباتات:</label>
+        <input type="text" id="spacing" name="spacing">
+      </div>
+
+      <!-- رطوبة الهواء -->
+      <div class="form-group">
+        <label for="humidityRequirements">رطوبة الهواء:</label>
+        <select id="humidityRequirements" name="humidityRequirements">
+          <option value="عالي">عالي</option>
+          <option value="متوسط">متوسط</option>
+          <option value="منخفض">منخفض</option>
+        </select>
+      </div>
+
+      <!-- الغرض -->
+      <div class="form-group">
+        <label for="purpose">الغرض:</label>
+        <select id="purpose" name="purpose">
+          <option value="زينة">زينة</option>
+          <option value="طعام">طعام</option>
+          <option value="طبي">طبي</option>
+        </select>
+      </div>
+
+      <!-- طريقة الزراعة -->
+      <div class="form-group">
+        <label for="plantingMethod">طريقة الزراعة:</label>
+        <input type="text" id="plantingMethod" name="plantingMethod">
+      </div>
+
+      <!-- الاحتياجات الخاصة -->
+      <div class="form-group">
+        <label for="specialRequirements">الاحتياجات الخاصة:</label>
+        <textarea id="specialRequirements" name="specialRequirements"></textarea>
+      </div>
+
+      <!-- الأمراض الشائعة -->
+      <div class="form-group">
+        <label for="commonDiseases">الأمراض الشائعة (مفصولة بفاصلة):</label>
+        <input type="text" id="commonDiseases" name="commonDiseases">
+      </div>
+
+      <!-- طرق الوقاية -->
+      <div class="form-group">
+        <label for="preventionMethods">طرق الوقاية (مفصولة بفاصلة):</label>
+        <textarea id="preventionMethods" name="preventionMethods"></textarea>
+      </div>
+
+      <!-- التسميد -->
+      <div class="form-group">
+        <label for="Fertilizers">التسميد:</label>
+        <input type="text" id="Fertilizers" name="Fertilizers">
+      </div>
+
+      <!-- المواد الكيميائية -->
+      <div class="form-group">
+        <label for="Chemicals">المواد الكيميائية:</label>
+        <input type="text" id="Chemicals" name="Chemicals">
+      </div>
+
+      <!-- الصور -->
+      <div class="form-group">
+        <label for="images">تحميل الصور:</label>
+        <input type="file" id="images" name="images" multiple>
+      </div>
+
+      <!-- الوصف -->
+      <div class="form-group">
+        <label for="description">الوصف:</label>
+        <textarea id="description" name="description"></textarea>
+      </div>
+
+      <!-- الفئة -->
+      <div class="form-group">
+        <label for="category">الفئة:</label>
+        <select id="category" name="category" required>
+          <option value="النباتات الطبية">النباتات الطبية</option>
+          <option value="النباتات العطرية">النباتات العطرية</option>
+          <option value="النباتات الغذائية">النباتات الغذائية</option>
+          <option value="النباتات الصناعية">النباتات الصناعية</option>
+          <option value="الفواكه">الفواكه</option>
+          <option value="الخضروات">الخضروات</option>
+          <option value="نباتات الزينة">نباتات الزينة</option>
+          <option value="النباتات البرية">النباتات البرية</option>
+        </select>
+      </div>
+
+      <!-- زر الإدخال -->
+      <div class="form-group">
+        <button type="submit">إدخال البيانات</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

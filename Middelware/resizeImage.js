@@ -24,14 +24,14 @@ const resizeImage = (options) => {
       const resizedImageBuffer = await sharp(imageBuffer)
         .resize(width, height, { fit: 'contain', background }) 
         .rotate()
-        .toFormat('jpeg')
-        .jpeg({ quality: quality })
+        .toFormat('png')
+        .png({ quality: quality })
         .toBuffer();
 
       
       req.file = {
         buffer: resizedImageBuffer,
-        base64: `data:image/jpeg;base64,${resizedImageBuffer.toString('base64')}`
+        base64: `data:image/png;base64,${resizedImageBuffer.toString('base64')}`
       };
 
       next();
@@ -57,8 +57,8 @@ const resizeImages = (options) => {
         const resizedImageBuffer = await sharp(file.buffer)
           .resize(width, height, { fit: 'contain', background }) 
           .rotate()
-          .toFormat('jpeg')
-          .jpeg({ quality: quality })
+          .toFormat('png')
+          .png({ quality: quality })
           .toBuffer();
 
         return {

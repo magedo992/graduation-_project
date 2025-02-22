@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة حيوان</title>
+   <style>/* General Reset */
+    /* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Body Styling */
+body {
+    background: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Align content to the top */
+    min-height: 100vh;
+    padding: 20px; /* Prevents content from touching the edges */
+    overflow-y: auto; /* Enable scrolling if content is longer */
+}
+
+/* Form Container */
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    max-height: 90vh; /* Prevents overflow */
+    overflow-y: auto; /* Scroll inside the container if needed */
+}
+
+/* Title */
+h2 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Error Message */
+.error {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Labels */
+label {
+    font-weight: bold;
+    text-align: left;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Input Fields */
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Textarea Styling */
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Submit Button */
+button {
+    background: #28a745;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #218838;
+}
+
+/* View Animals Link */
+a {
+    display: block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        width: 95%;
+        padding: 20px;
+    }
+
+    input, textarea, select {
+        font-size: 16px;
+    }
+
+    button {
+        font-size: 18px;
+    }
+}
+
+    </style>
+    <script>
+         const form = document.querySelector('form');
+  
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+
+    console.log(form)
+    fetch(form.action, {
+      method: form.method,
+      body: formData
+    })
+    .then(response => {
+      if (response.status==201) {
+        alert('تم إدخال البيانات بنجاح!');
+        location.reload(); 
+      } else {
+        alert('حدث خطأ أثناء إدخال البيانات.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('تعذر الاتصال بالخادم.');
+    });
+  });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>إضافة حيوان جديد</h2>
+        
+        <% if (error) { %>
+            <p class="error"><%= error %></p>
+        <% } %>
+
+        <form action="/animal/add" method="POST" enctype="multipart/form-data">
+            <label>الاسم العلمي:</label>
+            <input type="text" name="scientificName" required>
+
+            <label>الاسم الشائع:</label>
+            <input type="text" name="commonName" required>
+
+            <label>تحميل صورة:</label>
+            <input type="file" name="image" accept="image/*">
+
+            <label>الوصف:</label>
+            <textarea name="description" required></textarea>
+
+            <h3>التغذية</h3>
+            <label>نوع الغذاء:</label>
+            <select name="nutrition[dietType]" required>
+                <option value="Herbivore">آكل نباتات</option>
+                <option value="Carnivore">آكل لحوم</option>
+                <option value="Omnivore">آكل لحوم ونباتات</option>
+            </select>
+
+            <label>الأعلاف المناسبة:</label>
+            <input type="text" name="nutrition[suitableFeeds]" placeholder="أدخل الأعلاف مفصولة بفاصلة">
+
+            <label>كمية الطعام اليومية:</label>
+            <input type="text" name="nutrition[dailyFoodIntake]">
+
+            <label>كمية الماء اليومية:</label>
+            <input type="text" name="nutrition[dailyWaterNeeds]">
+
+            <label>الأطعمة الممنوعة:</label>
+            <input type="text" name="nutrition[forbiddenFoods]" placeholder="أدخل الأطعمة مفصولة بفاصلة">
+
+            <h3>دورة الحياة</h3>
+            <label>متوسط العمر:</label>
+            <input type="text" name="lifeCycle[averageLifespan]">
+
+            <label>عمر النضج الجنسي:</label>
+            <input type="text" name="lifeCycle[sexualMaturityAge]">
+
+            <label>فترة الحمل:</label>
+            <input type="text" name="lifeCycle[gestationPeriod]">
+
+            <label>عدد الصغار لكل ولادة:</label>
+            <input type="text" name="lifeCycle[offspringPerBirth]">
+
+            <h3>الصحة</h3>
+            <label>الأمراض الشائعة:</label>
+            <input type="text" name="health[commonDiseases]" placeholder="أدخل الأمراض مفصولة بفاصلة">
+
+
+            <h3>الرعاية</h3>
+            <label>درجة الحرارة المناسبة:</label>
+            <input type="text" name="care[livingConditions][temperature]">
+
+            <label>مستوى الرطوبة:</label>
+            <input type="text" name="care[livingConditions][humidity]">
+
+            <label>نوع المأوى:</label>
+            <input type="text" name="care[livingConditions][shelterType]">
+
+            <label>جدول التطعيمات:</label>
+            <input type="text" name="care[vaccinationSchedule]" placeholder="أدخل التطعيمات مفصولة بفاصلة">
+
+            <h3>الإنتاج</h3>
+            <label>الفوائد:</label>
+            <input type="text" name="production[benefits]" placeholder="أدخل الفوائد مفصولة بفاصلة">
+
+            <h3>السلوك</h3>
+            <label>الطبيعة:</label>
+            <input type="text" name="behavior[nature]">
+
+            <label>إرشادات التعامل:</label>
+            <input type="text" name="behavior[handlingGuidelines]">
+
+            <h3>معلومات إضافية</h3>
+            <label>نصائح الخبراء:</label>
+            <input type="text" name="additionalInfo[expertTips]">
+
+            <button type="submit">إضافة الحيوان</button>
+        </form>
+
+    </div>
+</body>
+</html>

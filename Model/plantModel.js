@@ -1,4 +1,3 @@
-
 const { required } = require('joi');
 const mongoose = require('mongoose');
 
@@ -10,17 +9,17 @@ const plantSchema = new mongoose.Schema({
   soilType: {
     type: String,
     required: true,
-    enum: ['رملي', 'طيني', 'طمي', 'خصب'], // القيم باللغة العربية
+   
   },
   lightRequirements: {
     type: String,
     required: true,
-    enum: ['شمس كاملة', 'ظل جزئي', 'ظل'], // القيم باللغة العربية
+    enum: ['عالي', 'متوسط', 'منخفض'], // القيم باللغة العربية
   },
   waterRequirements: {
     type: String,
     required: true,
-    enum: ['عالية', 'متوسطة', 'منخفضة'], // القيم باللغة العربية
+    enum: ['عالي', 'متوسط', 'منخفض'], // القيم باللغة العربية
   },
   temperatureRange: {
     type: String,
@@ -31,7 +30,7 @@ const plantSchema = new mongoose.Schema({
     required: true,
   },
   growthDuration: {
-    type: Number,
+    type: String,
     required: true,
   },
   spacing: {
@@ -39,28 +38,31 @@ const plantSchema = new mongoose.Schema({
   },
   humidityRequirements: {
     type: String,
-    enum: ['عالية', 'متوسطة', 'منخفضة'], // القيم باللغة العربية
+    enum: ['عالي', 'متوسط', 'منخفض'], // القيم باللغة العربية
   },
   purpose: {
     type: String,
-    enum: ['زينة', 'طعام', 'طبي'], // القيم باللغة العربية
+    enum: ['زينة', 'طعام', 'طبي'], 
   },
   plantingMethod: {
     type: String,
-    enum: ['بذور', 'قصاصات', 'شتلات'], // القيم باللغة العربية
   },
   specialRequirements: {
     type: String,
   },
   commonDiseases: [String],
-  Fertilizers: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'fertilizer'
-  }],
-  Chemicals: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'chemical'
-  }],
+  preventionMethods: { // New attribute for طرق الوقاية
+    type: [String], // Array of strings to store multiple prevention methods
+    default: [], // Default to an empty array
+  },
+  Fertilizers: {
+    type:String
+   
+  },
+  Chemicals: {
+    type: String,
+    
+  },
   images: [{
     url: String,
   }],
@@ -72,11 +74,10 @@ const plantSchema = new mongoose.Schema({
     type: String,
     required: false, 
   },
-  category:{
-    type:String,
-    enum:['النباتات الطبية','النباتات العطرية','النباتات الغذائية','النباتات الصناعية','الفواكه','الخضروات','نباتات الزينة',
-      'النباتات البرية'],
-    required:true
+  category: {
+    type: String,
+    enum: ['النباتات الطبية', 'النباتات العطرية', 'النباتات الغذائية', 'النباتات الصناعية', 'الفواكه', 'الخضروات', 'نباتات الزينة', 'النباتات البرية'],
+  
   }
 });
 
