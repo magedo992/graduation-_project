@@ -33,6 +33,8 @@ exports.verifay = async (req, res, next) => {
 
         
         const user = await userModel.findById(decoded.id);
+     
+        
         if (!user) {
             return res.status(404).json({
                
@@ -42,7 +44,10 @@ exports.verifay = async (req, res, next) => {
 
        
         if (user.token && token !== user.token) {
+     
+            
             return res.status(401).json({
+                
               
                 'message': 'Please log in again.'
             });
