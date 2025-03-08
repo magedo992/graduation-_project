@@ -4,7 +4,7 @@ const router = express.Router();
 const { signUp, activateAccount, 
     SendactivationCode, login,
     SendForgetPasswordCode,
-    CodeForgetPassowrd,ResetPassword
+    CodeForgetPassowrd,ResetPassword,checkEmail
      } = require('../Controller/authController');
      const verifay=require('../Middelware/verifyToken');
     
@@ -39,7 +39,8 @@ router.get('/Home',verifay.verifay,async(req,res)=>{
    return res.status(200).json({userData:user});
 
 
-})
+});
+router.post('/checkEmail',upload.none(),checkEmail);
 
 
 module.exports = router;

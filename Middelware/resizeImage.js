@@ -22,7 +22,7 @@ const resizeImage = (options) => {
 
       
       const resizedImageBuffer = await sharp(imageBuffer)
-        .resize(width, height, { fit: 'contain', background }) 
+        .resize(width, height, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }) 
         .rotate()
         .toFormat('png')
         .png({ quality: quality })
@@ -49,13 +49,13 @@ const resizeImages = (options) => {
       return next();
     }
 
-    const { width = 800, height = 800, quality = 80, background = { r: 255, g: 255, b: 255, alpha: 1 } } = options;
+    const { width = 800, height = 800, quality = 80 } = options;
 
     try {
       req.files = await Promise.all(req.files.map(async (file) => {
        
         const resizedImageBuffer = await sharp(file.buffer)
-          .resize(width, height, { fit: 'contain', background }) 
+          .resize(width, height, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }) 
           .rotate()
           .toFormat('png')
           .png({ quality: quality })

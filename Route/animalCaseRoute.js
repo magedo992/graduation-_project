@@ -4,7 +4,7 @@ const { upload, resizeImage } = require('../Middelware/resizeImage');
 const {createAnimalForm}=require('../Controller/animalCaseController');
 
 
-router.post('/Veterinary',upload.array('images',3),createAnimalForm);
+router.post('/Veterinary',upload.array('images',4),createAnimalForm);
 
 
 module.exports=router;

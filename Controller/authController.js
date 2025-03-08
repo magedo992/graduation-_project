@@ -4,7 +4,6 @@ const {cloudinary}=require('../Middelware/uploadImage');
 const {uploadFromBase64}=require('../Utils/uploadImage');
 const {sendActivationcode ,sendForgetPasswordCode}=require('../templates/activationEmail');
 const asyncHandler=require('express-async-handler');
-// const {ErrorHandler}=require('../Utils/ErrorHandler');
 const {ErrorHandler} = require('../Utils/ErrorHandler');
 const {sendEmail}=require('../Utils/EmailSender');
 const bcrypt=require('bcrypt');
@@ -238,3 +237,13 @@ exports.CodeForgetPassowrd=asyncHandler(async (req,res,next)=>{
   
     res.status(200).json({ message: "Password reset successfully" });
   });
+
+
+  exports.checkEmail=asyncHandler(async (req,res,next)=>{
+    const user =await userModel.findOne({email:req.body.email});
+    if(user)
+    {
+return next(new ErrorHandler("User already exit",400));
+    }
+    return res.status(200).json({message:"user not found"});
+  })
