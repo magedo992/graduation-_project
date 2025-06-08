@@ -23,9 +23,10 @@ exports.getAddAnimalForm = asyncHandler((req, res) => {
 exports.addAnimal = asyncHandler(async (req, res) => {
     try {
         const {
-            scientificName, commonName, description, nutrition,
-            lifeCycle, health, care, production, behavior,
-            additionalInfo, animalType
+            scientificName, commonName, description,
+            waterNeeds, foodNeeds, age, // ✅ تم الإضافة هنا
+            nutrition, lifeCycle, health, care, production,
+            behavior, additionalInfo, animalType
         } = req.body;
 
         if (!scientificName || !commonName || !animalType) {
@@ -35,7 +36,6 @@ exports.addAnimal = asyncHandler(async (req, res) => {
             });
         }
 
-        
         let vaccinationSchedule = [];
         if (care && care.vaccinationSchedule) {
             for (let key in care.vaccinationSchedule) {
@@ -51,7 +51,7 @@ exports.addAnimal = asyncHandler(async (req, res) => {
         }
 
         let result = null;
-       let imageUrls = ["default.png"]; 
+        let imageUrls = ["default.png"];
         if (req.files && req.files.length > 0) {
             try {
                 imageUrls = await Promise.all(
@@ -64,9 +64,6 @@ exports.addAnimal = asyncHandler(async (req, res) => {
                 return res.status(500).json({ status: "error", message: "Image upload failed" });
             }
         }
-        console.log(imageUrls);
-        
-
 
         const parseDiseases = (input) => {
             if (!input) return [];
@@ -83,6 +80,9 @@ exports.addAnimal = asyncHandler(async (req, res) => {
             scientificName,
             commonName,
             image: imageUrls,
+            waterNeeds,   // ✅ مضاف
+            foodNeeds,    // ✅ مضاف
+            age,          // ✅ مضاف
             description,
             nutrition: {
                 dietType: nutrition?.dietType,

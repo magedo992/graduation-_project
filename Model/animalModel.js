@@ -49,6 +49,9 @@ const animalSchema = new mongoose.Schema({
   scientificName: { type: String, required: true },
   commonName: { type: String, required: true },
   image: [{ type: String, required: true }],
+  waterNeeds: { type: String },     
+  foodNeeds: { type: String },       
+  age: { type: String },             
   description: { type: String, required: true },
   nutrition: nutritionSchema,
   lifeCycle: {
