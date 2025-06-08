@@ -16,25 +16,57 @@ const uploadFromBuffer = (fileBuffer) => {
     });
 };
 
-// Render the add animal form
 exports.getAddAnimalForm = asyncHandler((req, res) => {
     res.render('addAnimal', { error: null });
 });
 
-// Add a new animal
-exports.addAnimal = asyncHandler(async (req, res, next) => {
+exports.addAnimal = asyncHandler(async (req, res) => {
     try {
-        const { scientificName, commonName, description, nutrition, lifeCycle, health, care, production, behavior, additionalInfo } = req.body;
+        const {
+            scientificName, commonName, description, nutrition,
+            lifeCycle, health, care, production, behavior,
+            additionalInfo, animalType
+        } = req.body;
 
-        let result = null;
-        if (req.file) {
-            try {
-                result = await uploadFromBuffer(req.file.buffer);
-            } catch (error) {
-                console.error("Image Upload Error:", error);
-                return next(new ErrorHandler("Failed to upload image to Cloudinary", 500));
+        if (!scientificName || !commonName || !animalType) {
+            return res.status(400).json({
+                status: "error",
+                message: "scientificName, commonName, and animalType are required"
+            });
+        }
+
+        
+        let vaccinationSchedule = [];
+        if (care && care.vaccinationSchedule) {
+            for (let key in care.vaccinationSchedule) {
+                if (Array.isArray(care.vaccinationSchedule[key])) {
+                    vaccinationSchedule = care.vaccinationSchedule[key].map((v, index) => ({
+                        vaccine: v.vaccine || '',
+                        firstDoseAge: v.firstDoseAge || '',
+                        repetition: v.repetition || ''
+                    }));
+                    break;
+                }
             }
         }
+
+        let result = null;
+       let imageUrls = ["default.png"]; 
+        if (req.files && req.files.length > 0) {
+            try {
+                imageUrls = await Promise.all(
+                    req.files.map(async (file) => {
+                        const result = await uploadFromBuffer(file.buffer);
+                        return result.secure_url;
+                    })
+                );
+            } catch (error) {
+                return res.status(500).json({ status: "error", message: "Image upload failed" });
+            }
+        }
+        console.log(imageUrls);
+        
+
 
         const parseDiseases = (input) => {
             if (!input) return [];
@@ -46,65 +78,74 @@ exports.addAnimal = asyncHandler(async (req, res, next) => {
                 prevention: d.prevention || ""
             })) : [];
         };
-        
+
         const newAnimal = new Animal({
             scientificName,
             commonName,
-            image: result ? result.secure_url : "default.png",
+            image: imageUrls,
             description,
             nutrition: {
                 dietType: nutrition?.dietType,
-                suitableFeeds: nutrition?.suitableFeeds ? nutrition.suitableFeeds.split(',') : [],
-                dailyFoodIntake: nutrition?.dailyFoodIntake,
-                dailyWaterNeeds: nutrition?.dailyWaterNeeds,
-                forbiddenFoods: nutrition?.forbiddenFoods ? nutrition.forbiddenFoods.split(',') : []
+                suitableFeeds: nutrition?.suitableFeeds?.split(',') || [],
+                dailyFoodIntake: nutrition?.dailyFoodIntake?.split(',') || [],
+                dailyWaterNeeds: nutrition?.dailyWaterNeeds?.split(',') || [],
+                forbiddenFoods: nutrition?.forbiddenFoods?.split(',') || []
             },
             lifeCycle: {
                 averageLifespan: lifeCycle?.averageLifespan,
                 sexualMaturityAge: lifeCycle?.sexualMaturityAge,
                 gestationPeriod: lifeCycle?.gestationPeriod,
-                offspringPerBirth: lifeCycle?.offspringPerBirth
+                offspringPerBirth: lifeCycle?.offspringPerBirth?.split(',') || []
             },
             health: {
-                commonDiseases: parseDiseases(health?.commonDiseases) // ✅ Now stores an array of objects
+                nameArabic: health?.nameArabic?.split(',') || [],
+                symptoms: health?.symptoms,
+                treatment: health?.treatment,
+                prevention: health?.prevention
             },
             care: {
+                environment: care?.environment?.split(',') || [],
+                hygiene: care?.hygiene,
+                emergencyCases: care?.emergencyCases,
                 livingConditions: {
                     temperature: care?.livingConditions?.temperature,
                     humidity: care?.livingConditions?.humidity,
                     shelterType: care?.livingConditions?.shelterType
                 },
-                vaccinationSchedule: care?.vaccinationSchedule ? care.vaccinationSchedule.split(',') : [],
-                hygieneCare: care?.hygieneCare,
-                emergencyHandling: care?.emergencyHandling
+                vaccinationSchedule
             },
             production: {
-                benefits: production?.benefits ? production.benefits.split(',') : [],
-                optimizationMethods: production?.optimizationMethods ? production.optimizationMethods.split(',') : []
+                benefits: production?.benefits?.split(',') || [],
+                optimizationMethods: production?.optimizationMethods?.split(',') || []
             },
             behavior: {
                 nature: behavior?.nature,
                 handlingGuidelines: behavior?.handlingGuidelines,
-                comfortSigns: behavior?.comfortSigns ? behavior.comfortSigns.split(',') : [],
-                stressSigns: behavior?.stressSigns ? behavior.stressSigns.split(',') : []
+                comfortSigns: behavior?.comfortSigns?.split(',') || [],
+                stressSigns: behavior?.stressSigns?.split(',') || []
             },
             additionalInfo: {
                 expertTips: additionalInfo?.expertTips,
-                interestingFacts: additionalInfo?.interestingFacts ? additionalInfo.interestingFacts.split(',') : []
-            }
+                interestingFacts: additionalInfo?.interestingFacts?.split(',') || []
+            },
+            animalType
         });
-        
+
         await newAnimal.save();
-        res.status(201).json({message:"created suceess"});
+        res.status(201).json({ status: "success", message: "created successfully" });
+
     } catch (error) {
         console.error("Error Adding Animal:", error);
-        res.status(400).json({ status: "error", message: error.message });
+        res.status(500).json({ status: "error", message: error.message });
     }
 });
 
 exports.viewAnimals = asyncHandler(async (req, res) => {
-   
+    try {
         const animals = await Animal.find();
         res.status(200).json({ data: animals });
-  
+    } catch (error) {
+        console.error("Error Fetching Animals:", error);
+        res.status(500).json({ status: "error", message: error.message });
+    }
 });

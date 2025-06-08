@@ -1,64 +1,71 @@
 const mongoose = require('mongoose');
 
-const diseaseSchema = new mongoose.Schema({
-  nameArabic: { type: String, required: true },
-  nameEnglish: { type: String, required: true },
-  symptoms: [{ type: String }],
-  treatment: { type: String },
-  prevention: { type: String }
+const nutritionSchema = new mongoose.Schema({
+  dietType: String,
+  suitableFeeds: [String],
+  dailyFoodIntake: [String],
+  dailyWaterNeeds: [String],
+  forbiddenFoods: [String]
+});
+
+const healthSchema = new mongoose.Schema({
+  nameArabic: [String],
+  symptoms: String,
+  treatment: String,
+  prevention: String
+});
+
+const careSchema = new mongoose.Schema({
+  environment: [{ type: String }],
+  hygiene: { type: String },
+  emergencyCases: { type: String },
+  vaccinationSchedule: [
+    {
+      vaccine: { type: String },
+      firstDoseAge: { type: String },
+      repetition: { type: String }
+    }
+  ]
+});
+
+const behaviorSchema = new mongoose.Schema({
+  nature: { type: String },
+  handlingGuidelines: { type: String },
+  comfortSigns: [String], 
+  stressSigns: [String]   
+});
+
+const productionSchema = new mongoose.Schema({
+  benefits: [String],
+  optimizationMethods: [String]
+});
+
+const additionalInfoSchema = new mongoose.Schema({
+  expertTips: { type: String },
+  interestingFacts: [String]
 });
 
 const animalSchema = new mongoose.Schema({
   scientificName: { type: String, required: true },
   commonName: { type: String, required: true },
-  image: { type: String }, // URL of the image
+  image: [{ type: String, required: true }],
   description: { type: String, required: true },
-  
-  nutrition: {
-    dietType: { type: String, enum: ['Herbivore', 'Carnivore', 'Omnivore'], required: true },
-    suitableFeeds: [{ type: String }],
-    dailyFoodIntake: { type: String },
-    dailyWaterNeeds: { type: String },
-    forbiddenFoods: [{ type: String }]
-  },
-  
+  nutrition: nutritionSchema,
   lifeCycle: {
-    averageLifespan: { type: String },
-    sexualMaturityAge: { type: String },
-    gestationPeriod: { type: String },
-    offspringPerBirth: { type: String }
+    averageLifespan: String,
+    sexualMaturityAge: String,
+    gestationPeriod: String,
+    offspringPerBirth: [String],
   },
-  
-  health: {
-    commonDiseases: [diseaseSchema]
-  },
-  
-  care: {
-    livingConditions: {
-      temperature: { type: String },
-      humidity: { type: String },
-      shelterType: { type: String }
-    },
-    vaccinationSchedule: [{ type: String }],
-    hygieneCare: { type: String },
-    emergencyHandling: { type: String }
-  },
-  
-  production: {
-    benefits: [{ type: String }],
-    optimizationMethods: [{ type: String }]
-  },
-  
-  behavior: {
-    nature: { type: String },
-    handlingGuidelines: { type: String },
-    comfortSigns: [{ type: String }],
-    stressSigns: [{ type: String }]
-  },
-  
-  additionalInfo: {
-    expertTips: { type: String },
-    interestingFacts: [{ type: String }]
+  health: healthSchema,
+  care: careSchema,
+  behavior: behaviorSchema,
+  production: productionSchema,
+  additionalInfo: additionalInfoSchema, 
+  animalType: {
+    type: String,
+    enum: ["دواجن", "ماشية", "حيوانات المزارع الصغيرة", "حيوانات النقل"],
+    required: true
   }
 }, { timestamps: true });
 

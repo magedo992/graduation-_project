@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const animalCaseSchema = new mongoose.Schema({
     animalType: {
         type: String,
-        enum: ['حمار', 'بقر', 'جاموس', 'أغنام', 'ماعز', 'حصان', 'دواجن', 'أرانب'], 
+        enum: ['الماعز', 'الاغنام', 'الجاموس', 'الابقار', 'الحمير', 'الاحصنة', 'الدواجن', 'الارانب'], 
         required: true
     },
     originDetermination: {

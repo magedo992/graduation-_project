@@ -1,250 +1,429 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إضافة حيوان</title>
-   <style>/* General Reset */
-    /* General Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-/* Body Styling */
-body {
-    background: #f4f4f4;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start; /* Align content to the top */
-    min-height: 100vh;
-    padding: 20px; /* Prevents content from touching the edges */
-    overflow-y: auto; /* Enable scrolling if content is longer */
-}
-
-/* Form Container */
-.container {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 500px;
-    text-align: center;
-    max-height: 90vh; /* Prevents overflow */
-    overflow-y: auto; /* Scroll inside the container if needed */
-}
-
-/* Title */
-h2 {
-    margin-bottom: 15px;
-    color: #333;
-}
-
-/* Error Message */
-.error {
-    color: red;
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-
-/* Form Styling */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* Labels */
-label {
-    font-weight: bold;
-    text-align: left;
-    display: block;
-    margin-bottom: 5px;
-}
-
-/* Input Fields */
-input, textarea, select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-/* Textarea Styling */
-textarea {
-    resize: vertical;
-    min-height: 80px;
-}
-
-/* Submit Button */
-button {
-    background: #28a745;
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-button:hover {
-    background: #218838;
-}
-
-/* View Animals Link */
-a {
-    display: block;
-    margin-top: 10px;
-    text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-    .container {
-        width: 95%;
-        padding: 20px;
-    }
-
-    input, textarea, select {
-        font-size: 16px;
-    }
-
-    button {
-        font-size: 18px;
-    }
-}
-
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .section-title {
+            margin-bottom: 15px;
+            color: #3498db;
+        }
+        
+        .vaccine-item {
+            background: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .btn-success {
+            background: #2ecc71;
+        }
+        
+        .btn-success:hover {
+            background: #27ae60;
+        }
+        
+        .error {
+            color: #e74c3c;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        
+        .success {
+            color: #2ecc71;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+        }
     </style>
-    <script>
-         const form = document.querySelector('form');
-  
-  form.addEventListener('submit', function (event) {
-    event.preventDefault();
-
-    const formData = new FormData(form);
-
-    console.log(form)
-    fetch(form.action, {
-      method: form.method,
-      body: formData
-    })
-    .then(response => {
-      if (response.status==201) {
-        alert('تم إدخال البيانات بنجاح!');
-        location.reload(); 
-      } else {
-        alert('حدث خطأ أثناء إدخال البيانات.');
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('تعذر الاتصال بالخادم.');
-    });
-  });
-    </script>
 </head>
 <body>
     <div class="container">
-        <h2>إضافة حيوان جديد</h2>
+        <h1>إضافة حيوان جديد</h1>
         
         <% if (error) { %>
-            <p class="error"><%= error %></p>
+            <div class="error"><%= error %></div>
         <% } %>
-
-        <form action="/animal/add" method="POST" enctype="multipart/form-data">
-            <label>الاسم العلمي:</label>
-            <input type="text" name="scientificName" required>
-
-            <label>الاسم الشائع:</label>
-            <input type="text" name="commonName" required>
-
-            <label>تحميل صورة:</label>
-            <input type="file" name="image" accept="image/*">
-
-            <label>الوصف:</label>
-            <textarea name="description" required></textarea>
-
-            <h3>التغذية</h3>
-            <label>نوع الغذاء:</label>
-            <select name="nutrition[dietType]" required>
-                <option value="Herbivore">آكل نباتات</option>
-                <option value="Carnivore">آكل لحوم</option>
-                <option value="Omnivore">آكل لحوم ونباتات</option>
-            </select>
-
-            <label>الأعلاف المناسبة:</label>
-            <input type="text" name="nutrition[suitableFeeds]" placeholder="أدخل الأعلاف مفصولة بفاصلة">
-
-            <label>كمية الطعام اليومية:</label>
-            <input type="text" name="nutrition[dailyFoodIntake]">
-
-            <label>كمية الماء اليومية:</label>
-            <input type="text" name="nutrition[dailyWaterNeeds]">
-
-            <label>الأطعمة الممنوعة:</label>
-            <input type="text" name="nutrition[forbiddenFoods]" placeholder="أدخل الأطعمة مفصولة بفاصلة">
-
-            <h3>دورة الحياة</h3>
-            <label>متوسط العمر:</label>
-            <input type="text" name="lifeCycle[averageLifespan]">
-
-            <label>عمر النضج الجنسي:</label>
-            <input type="text" name="lifeCycle[sexualMaturityAge]">
-
-            <label>فترة الحمل:</label>
-            <input type="text" name="lifeCycle[gestationPeriod]">
-
-            <label>عدد الصغار لكل ولادة:</label>
-            <input type="text" name="lifeCycle[offspringPerBirth]">
-
-            <h3>الصحة</h3>
-            <label>الأمراض الشائعة:</label>
-            <input type="text" name="health[commonDiseases]" placeholder="أدخل الأمراض مفصولة بفاصلة">
-
-
-            <h3>الرعاية</h3>
-            <label>درجة الحرارة المناسبة:</label>
-            <input type="text" name="care[livingConditions][temperature]">
-
-            <label>مستوى الرطوبة:</label>
-            <input type="text" name="care[livingConditions][humidity]">
-
-            <label>نوع المأوى:</label>
-            <input type="text" name="care[livingConditions][shelterType]">
-
-            <label>جدول التطعيمات:</label>
-            <input type="text" name="care[vaccinationSchedule]" placeholder="أدخل التطعيمات مفصولة بفاصلة">
-
-            <h3>الإنتاج</h3>
-            <label>الفوائد:</label>
-            <input type="text" name="production[benefits]" placeholder="أدخل الفوائد مفصولة بفاصلة">
-
-            <h3>السلوك</h3>
-            <label>الطبيعة:</label>
-            <input type="text" name="behavior[nature]">
-
-            <label>إرشادات التعامل:</label>
-            <input type="text" name="behavior[handlingGuidelines]">
-
-            <h3>معلومات إضافية</h3>
-            <label>نصائح الخبراء:</label>
-            <input type="text" name="additionalInfo[expertTips]">
-
-            <button type="submit">إضافة الحيوان</button>
+        
+        <form id="animalForm" action="/animal/add" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="scientificName">الاسم العلمي:</label>
+                <input type="text" id="scientificName" name="scientificName" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="commonName">الاسم الشائع:</label>
+                <input type="text" id="commonName" name="commonName" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="animalType">نوع الحيوان:</label>
+                <select id="animalType" name="animalType" required>
+                    <option value="دواجن">دواجن</option>
+                    <option value="ماشية">ماشية</option>
+                    <option value="حيوانات المزارع الصغيرة">حيوانات المزارع الصغيرة</option>
+                    <option value="حيوانات النقل">حيوانات النقل</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="image">صورة الحيوان:</label>
+                <input type="file" id="image" name="image" accept="image/*" multiple>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">الوصف:</label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">التغذية</h3>
+                
+                <div class="form-group">
+                    <label for="dietType">نوع الغذاء:</label>
+                    <select id="dietType" name="nutrition[dietType]" required>
+                        <option value="عشبي">عشبي</option>
+                        <option value="لاحم">لاحم</option>
+                        <option value="قارت">قارت</option>
+                        <option value="آخر">آخر</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="suitableFeeds">الأعلاف المناسبة (مفصولة بفاصلة):</label>
+                    <input type="text" id="suitableFeeds" name="nutrition[suitableFeeds]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="dailyFoodIntake">كمية الطعام اليومية (مفصولة بفاصلة):</label>
+                    <input type="text" id="dailyFoodIntake" name="nutrition[dailyFoodIntake]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="dailyWaterNeeds">كمية الماء اليومية:</label>
+                    <input type="text" id="dailyWaterNeeds" name="nutrition[dailyWaterNeeds]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="forbiddenFoods">الأطعمة الممنوعة (مفصولة بفاصلة):</label>
+                    <input type="text" id="forbiddenFoods" name="nutrition[forbiddenFoods]">
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">دورة الحياة</h3>
+                
+                <div class="form-group">
+                    <label for="averageLifespan">متوسط العمر:</label>
+                    <input type="text" id="averageLifespan" name="lifeCycle[averageLifespan]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="sexualMaturityAge">عمر النضج الجنسي:</label>
+                    <input type="text" id="sexualMaturityAge" name="lifeCycle[sexualMaturityAge]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="gestationPeriod">فترة الحمل:</label>
+                    <input type="text" id="gestationPeriod" name="lifeCycle[gestationPeriod]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="offspringPerBirth">عدد الصغار لكل ولادة (مفصولة بفاصلة):</label>
+                    <input type="text" id="offspringPerBirth" name="lifeCycle[offspringPerBirth]">
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">الصحة</h3>
+                
+                <div class="form-group">
+                    <label for="commonDiseases">الأمراض الشائعة (مفصولة بفاصلة):</label>
+                    <input type="text" id="commonDiseases" name="health[nameArabic]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="symptoms">الأعراض:</label>
+                    <input type="text" id="symptoms" name="health[symptoms]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="treatment">العلاج:</label>
+                    <input type="text" id="treatment" name="health[treatment]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="prevention">الوقاية:</label>
+                    <input type="text" id="prevention" name="health[prevention]">
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">الرعاية</h3>
+                
+                <div class="form-group">
+                    <label for="temperature">درجة الحرارة المناسبة:</label>
+                    <input type="text" id="temperature" name="care[livingConditions][temperature]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="humidity">مستوى الرطوبة:</label>
+                    <input type="text" id="humidity" name="care[livingConditions][humidity]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="shelterType">نوع المأوى:</label>
+                    <input type="text" id="shelterType" name="care[livingConditions][shelterType]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="environment">البيئة (مفصولة بفاصلة):</label>
+                    <input type="text" id="environment" name="care[environment]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="hygiene">النظافة:</label>
+                    <input type="text" id="hygiene" name="care[hygiene]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="emergencyCases">حالات الطوارئ:</label>
+                    <input type="text" id="emergencyCases" name="care[emergencyCases]">
+                </div>
+                
+                <h4>جدول التطعيمات</h4>
+                <div id="vaccinationContainer">
+                    <div class="vaccine-item">
+                        <div class="form-group">
+                            <label>اسم التطعيم:</label>
+                            <input type="text" name="care[vaccinationSchedule][0][vaccine]">
+                        </div>
+                        <div class="form-group">
+                            <label>العمر الأولي:</label>
+                            <input type="text" name="care[vaccinationSchedule][0][firstDoseAge]">
+                        </div>
+                        <div class="form-group">
+                            <label>التكرار:</label>
+                            <input type="text" name="care[vaccinationSchedule][0][repetition]">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-success" id="addVaccine">إضافة تطعيم</button>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">الإنتاج</h3>
+                
+                <div class="form-group">
+                    <label for="benefits">الفوائد (مفصولة بفاصلة):</label>
+                    <input type="text" id="benefits" name="production[benefits]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="optimizationMethods">طرق التحسين (مفصولة بفاصلة):</label>
+                    <input type="text" id="optimizationMethods" name="production[optimizationMethods]">
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">السلوك</h3>
+                
+                <div class="form-group">
+                    <label for="nature">الطبيعة:</label>
+                    <input type="text" id="nature" name="behavior[nature]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="handlingGuidelines">إرشادات التعامل:</label>
+                    <input type="text" id="handlingGuidelines" name="behavior[handlingGuidelines]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="comfortSigns">علامات الراحة (مفصولة بفاصلة):</label>
+                    <input type="text" id="comfortSigns" name="behavior[comfortSigns]">
+                </div>
+                
+                <div class="form-group">
+                    <label for="stressSigns">علامات التوتر (مفصولة بفاصلة):</label>
+                    <input type="text" id="stressSigns" name="behavior[stressSigns]">
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">معلومات إضافية</h3>
+                
+                <div class="form-group">
+                    <label for="expertTips">نصائح الخبراء:</label>
+                    <textarea id="expertTips" name="additionalInfo[expertTips]"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="interestingFacts">حقائق مثيرة (مفصولة بفاصلة):</label>
+                    <input type="text" id="interestingFacts" name="additionalInfo[interestingFacts]">
+                </div>
+            </div>
+            
+            <button type="submit" class="btn">حفظ</button>
         </form>
-
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('animalForm');
+            const vaccineContainer = document.getElementById('vaccinationContainer');
+            const addVaccineBtn = document.getElementById('addVaccine');
+            let vaccineCount = 1;
+            
+            // إضافة تطعيم جديد
+            addVaccineBtn.addEventListener('click', function() {
+                const newVaccine = document.createElement('div');
+                newVaccine.className = 'vaccine-item';
+                newVaccine.innerHTML = `
+                    <div class="form-group">
+                        <label>اسم التطعيم:</label>
+                        <input type="text" name="care[vaccinationSchedule][${vaccineCount}][vaccine]">
+                    </div>
+                    <div class="form-group">
+                        <label>العمر الأولي:</label>
+                        <input type="text" name="care[vaccinationSchedule][${vaccineCount}][firstDoseAge]">
+                    </div>
+                    <div class="form-group">
+                        <label>التكرار:</label>
+                        <input type="text" name="care[vaccinationSchedule][${vaccineCount}][repetition]">
+                    </div>
+                    <button type="button" class="btn btn-danger remove-vaccine">إزالة</button>
+                `;
+                vaccineContainer.appendChild(newVaccine);
+                vaccineCount++;
+                
+                // إضافة حدث لإزالة التطعيم
+                newVaccine.querySelector('.remove-vaccine').addEventListener('click', function() {
+                    vaccineContainer.removeChild(newVaccine);
+                });
+            });
+            
+            // إرسال النموذج
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(form);
+                
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('تم إضافة الحيوان بنجاح');
+                        form.reset();
+                    } else {
+                        alert('حدث خطأ: ' + (data.message || ''));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('حدث خطأ أثناء الإرسال');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
