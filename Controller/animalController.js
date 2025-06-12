@@ -24,7 +24,7 @@ exports.addAnimal = asyncHandler(async (req, res) => {
     try {
         const {
             scientificName, commonName, description,
-            waterNeeds, foodNeeds, age, // ✅ تم الإضافة هنا
+            waterNeeds, foodNeeds, age, 
             nutrition, lifeCycle, health, care, production,
             behavior, additionalInfo, animalType
         } = req.body;
@@ -80,9 +80,9 @@ exports.addAnimal = asyncHandler(async (req, res) => {
             scientificName,
             commonName,
             image: imageUrls,
-            waterNeeds,   // ✅ مضاف
-            foodNeeds,    // ✅ مضاف
-            age,          // ✅ مضاف
+            waterNeeds,  
+            foodNeeds,    
+            age,          
             description,
             nutrition: {
                 dietType: nutrition?.dietType,

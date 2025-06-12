@@ -3,6 +3,7 @@ require('dotenv').config();
 const app = express();
 const port = process.env.port;
 const db = require('./dbConfig/db');
+const {keepalive}=require('./test');
 
 const session = require('express-session');
 const {verifay}=require('./Middelware/verifyToken');
@@ -42,7 +43,12 @@ app.use((err, req, res, next) => {
     });
 });
 
+
+
+
+
 app.listen(port, () => {
     db.connectToDb();
     console.log(`Server running on port ${port}`);
+    keepalive()
 });
