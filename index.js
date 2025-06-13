@@ -16,7 +16,7 @@ app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
 app.set('views', path.join(__dirname,'view'));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json({limit:'100mb'})); 
+app.use(express.json({limit:'50mb'})); 
 app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
