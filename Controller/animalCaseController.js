@@ -4,7 +4,7 @@ const { ErrorHandler } = require('../Utils/ErrorHandler');
 const { cloudinary } = require('../Middelware/uploadImage');
 const sharp = require('sharp');
 
-// Create a new animal case
+
 exports.createAnimalForm = asyncHandler(async (req, res, next) => {
   const {
     animalType,
@@ -21,9 +21,9 @@ exports.createAnimalForm = asyncHandler(async (req, res, next) => {
 
   const processedImages = [];
 
-  // Process and upload up to 3 images
+ 
   if (images && Array.isArray(images)) {
-    const imagesToProcess = images.slice(0, 3); // limit to 3 images
+    const imagesToProcess = images.slice(0, 3);
 
     for (const base64Image of imagesToProcess) {
       try {
