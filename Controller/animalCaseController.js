@@ -27,19 +27,7 @@ exports.createAnimalForm = asyncHandler(async (req, res, next) => {
 
     for (const base64Image of imagesToProcess) {
       try {
-        if (!base64Image.startsWith('data:image/')) {
-          console.warn('Invalid image format - skipping');
-          continue;
-        }
-
-        const matches = base64Image.match(/^data:image\/(\w+);base64,(.+)$/);
-        if (!matches || matches.length !== 3) {
-          console.warn('Invalid base64 format - skipping');
-          continue;
-        }
-
-        const imageData = matches[2];
-        const buffer = Buffer.from(imageData, 'base64');
+        const buffer = Buffer.from(base64Image, 'base64');
 
         if (buffer.length === 0) {
           console.warn('Empty image buffer - skipping');
