@@ -22,7 +22,7 @@ router.post("/upload", upload.array("images", 15), resizeImages({ width: 1024, h
       }
 
       const uploadStream = cloudinary.uploader.upload_stream(
-        { folder: "planet" ,format:'png'},
+        { folder: "Animals" ,format:'png'},
         (error, result) => {
           if (error) {
             return reject(error);

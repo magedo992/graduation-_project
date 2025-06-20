@@ -22,6 +22,7 @@
            
             
 
+       
         
             let decoded;
             try {
@@ -32,6 +33,7 @@
                     'message': 'Invalid or expired token. Please log in again.'
                 });
             }
+
 
             
             const user = await userModel.findById(decoded.id);
@@ -46,6 +48,7 @@
 
         
 
+           
             
             req.user = user;
 

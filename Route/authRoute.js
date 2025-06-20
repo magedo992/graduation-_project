@@ -14,6 +14,7 @@ const { upload, resizeImage } = require('../Middelware/resizeImage');
 const {googleAuth}=require('../Controller/GoogleController');
 const userModel=require('../Model/UserModel');
 const { ErrorHandler } = require('../Utils/ErrorHandler');
+const {updateUserData,deleteUser}=require('../Controller/userController');
 
 
 
@@ -41,6 +42,10 @@ router.get('/Home',verifay.verifay,async(req,res)=>{
 
 });
 router.post('/checkEmail',upload.none(),checkEmail);
+router.put('/updateUserData',verifay.verifay, 
+   upload.single('ProfileImage'), resizeImage({ width: 1024, height: 1024, quality: 90 }),updateUserData);
+
+   router.delete('/deleteAccount',verifay.verifay,upload.none(),deleteUser)
 
 
 module.exports = router;
