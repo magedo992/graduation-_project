@@ -3,7 +3,7 @@ const animalCaseModel = require('../Model/animalCaseModel');
 const { ErrorHandler } = require('../Utils/ErrorHandler');
 const { cloudinary } = require('../Middelware/uploadImage');
 const sharp = require('sharp');
-
+const userModel=require('../Model/UserModel');
 
 exports.createAnimalForm = asyncHandler(async (req, res, next) => {
   const {
@@ -14,6 +14,7 @@ exports.createAnimalForm = asyncHandler(async (req, res, next) => {
     images,
     notes,
   } = req.body;
+  const user=await userModel.findById(req.body.id);
 
   if (!animalType || !contactInformation) {
     return next(new ErrorHandler("نوع الحيوان ومعلومات الاتصال مطلوبة", 400));
@@ -75,6 +76,8 @@ exports.createAnimalForm = asyncHandler(async (req, res, next) => {
       contactInformation,
       images: processedImages,
       notes,
+      governorate:user.city
+      
     });
 
     res.status(201).json({

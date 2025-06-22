@@ -43,8 +43,17 @@ const animalCaseSchema = new mongoose.Schema({
     notes: {
         type: String,
         default: ''
-    }
-});
+    },
+      status: {
+  type: String,
+  enum: ['Pending', 'In Progress', 'Resolved'],
+  default: 'Pending'
+},
+governorate: {
+  type: String,
+  required: true
+},
+},{timestamps:true});
 
 const AnimalCase = mongoose.model('AnimalCase', animalCaseSchema);
 

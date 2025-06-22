@@ -34,7 +34,8 @@ const animalCaseSchema = new mongoose.Schema({
         caseAddress: String, 
         caseLocation: String 
     },
-    images: [String] 
+    images: [String] ,
+  
 });
 
 
