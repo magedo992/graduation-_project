@@ -12,7 +12,6 @@ exports.getDashboardStats = asyncHandler(async (req, res) => {
   const yesterdayEnd = new Date(endOfDay);
   yesterdayEnd.setDate(yesterdayEnd.getDate() - 1);
 
-  // Helper to calculate response efficiency
   const getResponseEfficiency = async () => {
     const resolvedCases = await animalCase.find({ status: "Resolved" }, {
       createdAt: 1,
@@ -53,7 +52,7 @@ exports.getDashboardStats = asyncHandler(async (req, res) => {
     animalCase.countDocuments({ createdAt: { $gte: startOfDay, $lte: endOfDay } }),
     animalCase.countDocuments({ createdAt: { $gte: yesterdayStart, $lte: yesterdayEnd } }),
     animalCase.countDocuments({ "originDetermination.notDetermined.0": { $exists: true } }),
-    // Top governorates
+
     animalCase.aggregate([
       {
         $project: {
@@ -109,7 +108,7 @@ exports.getDashboardStats = asyncHandler(async (req, res) => {
         }
       }
     ]),
-    // Top diseases
+
     animalCase.aggregate([
       {
         $project: {
@@ -147,14 +146,10 @@ exports.getDashboardStats = asyncHandler(async (req, res) => {
         }
       }
     ]),
-    animalCase.find({}, {
-      _id: 1,
-      governorate: 1,
-      animalType: 1,
-      status: 1,
-      originDetermination: 1,
-      createdAt: 1
-    }).sort({ createdAt: -1 }),
+
+   
+    animalCase.find({}).sort({ createdAt: -1 }),
+
     animalCase.find({
       "contactInformation.caseLocation.coordinates": { $exists: true }
     }, {
@@ -164,42 +159,37 @@ exports.getDashboardStats = asyncHandler(async (req, res) => {
       originDetermination: 1,
       "contactInformation.caseLocation": 1
     }),
+
     getResponseEfficiency()
   ]);
 
   const changePercent = yesterdayCount ? ((todayCount - yesterdayCount) / yesterdayCount * 100) : 0;
 
-  const formattedReports = allReports.map(report => {
-    const allDiseases = [
-      ...report.originDetermination.insectRelatedIssues || [],
-      ...report.originDetermination.bacterialIssues || [],
-      ...report.originDetermination.viralIssues || [],
-      ...report.originDetermination.infectionsAndParasites || [],
-      ...report.originDetermination.newIssues || [],
-      ...report.originDetermination.respiratoryIssues || [],
-      ...report.originDetermination.traumasAndInheritance || [],
-      ...report.originDetermination.notDetermined || []
-    ];
-    return {
-      id: report._id,
-      governorate: report.governorate,
-      disease: allDiseases.join(', ') || 'غير محدد',
-      animalType: report.animalType,
-      status: report.status,
-      createdAt: report.createdAt
-    };
-  });
+
+  const formattedReports = allReports.map(report => ({
+    id: report._id,
+    animalType: report.animalType,
+    originDetermination: report.originDetermination,
+    diagnosticQuestions: report.diagnosticQuestions,
+    contactInformation: report.contactInformation,
+    images: report.images,
+    notes: report.notes,
+    status: report.status,
+    governorate: report.governorate,
+    createdAt: report.createdAt,
+    updatedAt: report.updatedAt
+  }));
 
   const formattedMapPoints = mapPoints.map(c => {
     const allDiseases = [
-      ...c.originDetermination.insectRelatedIssues || [],
-      ...c.originDetermination.bacterialIssues || [],
-      ...c.originDetermination.viralIssues || [],
-      ...c.originDetermination.infectionsAndParasites || [],
-      ...c.originDetermination.newIssues || [],
-      ...c.originDetermination.respiratoryIssues || [],
-      ...c.originDetermination.traumasAndInheritance || [],
-      ...c.originDetermination.notDetermined || []
+      ...(c.originDetermination.insectRelatedIssues || []),
+      ...(c.originDetermination.bacterialIssues || []),
+      ...(c.originDetermination.viralIssues || []),
+      ...(c.originDetermination.infectionsAndParasites || []),
+      ...(c.originDetermination.newIssues || []),
+      ...(c.originDetermination.respiratoryIssues || []),
+      ...(c.originDetermination.traumasAndInheritance || []),
+      ...(c.originDetermination.notDetermined || [])
     ];
     return {
       lat: c.contactInformation.caseLocation.coordinates[1],
@@ -211,23 +201,22 @@ exports.getDashboardStats = asyncHandler(async (req, res) => {
   });
 
   res.status(200).json({
-  success: true,
-  stats: {
-    todayCount,
-    yesterdayCount,
-    changePercent: changePercent.toFixed(2),
-    changeDetails: {
-      today: todayCount,
-      yesterday: yesterdayCount,
-      percent: changePercent.toFixed(2)
+    success: true,
+    stats: {
+      todayCount,
+      yesterdayCount,
+      changePercent: changePercent.toFixed(2),
+      changeDetails: {
+        today: todayCount,
+        yesterday: yesterdayCount,
+        percent: changePercent.toFixed(2)
+      },
+      unknownCount,
+      topGovernorates,
+      topDiseases,
+      responseEfficiency,
+      mapPoints: formattedMapPoints
     },
-    unknownCount,
-    topGovernorates,
-    topDiseases,
-    reports: formattedReports,
-    mapPoints: formattedMapPoints,
-    responseEfficiency
-  }
-});
-
+    reports: formattedReports 
+  });
 });

@@ -14,7 +14,10 @@ exports.createAnimalForm = asyncHandler(async (req, res, next) => {
     images,
     notes,
   } = req.body;
-  const user=await userModel.findById(req.body.id);
+  const user=await userModel.findById(req.user.id);
+  
+  
+
 
   if (!animalType || !contactInformation) {
     return next(new ErrorHandler("نوع الحيوان ومعلومات الاتصال مطلوبة", 400));
@@ -68,6 +71,10 @@ exports.createAnimalForm = asyncHandler(async (req, res, next) => {
     }
   }
 
+
+  console.log(user.state);
+  
+ 
   try {
     const animalCase = await animalCaseModel.create({
       animalType,
@@ -87,6 +94,6 @@ exports.createAnimalForm = asyncHandler(async (req, res, next) => {
     });
   } catch (dbError) {
     console.error('Database error:', dbError);
-    next(new ErrorHandler("حدث خطأ أثناء حفظ البيانات", 500));
+    next(new ErrorHandler("حدث خطأ أثناء حفظ البيانات",dbError, 500));
   }
 });
