@@ -12,7 +12,7 @@ exports.googleAuth = asyncHandler(async (req, res) => {
   if (!user) {
     user = new userModel({
       email,
-      username: displayName,p,
+      username: displayName,
       googleId: uid,
       image: photoURL,
       isActive: true,
